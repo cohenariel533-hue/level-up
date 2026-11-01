@@ -1,4 +1,5 @@
 import { SAFETY_BUFFER_TARGET } from '../lib/money';
+import { DEFAULT_TEMPLATE } from './defaultTemplate';
 import { db } from './schema';
 import { getSetting, setSetting } from './settings';
 
@@ -13,6 +14,7 @@ export async function initDatabase(): Promise<void> {
   }
 
   await seedSavingsGoals();
+  await seedWeekTemplate();
 
   // Ask the browser not to clear our data when the device is low on space.
   try {
@@ -22,6 +24,16 @@ export async function initDatabase(): Promise<void> {
   } catch {
     // Not supported everywhere, and that's fine.
   }
+}
+
+/**
+ * Stage 3: the default weekly template. Guarded by a flag rather than "table
+ * is empty", so deliberately clearing the template doesn't refill it.
+ */
+async function seedWeekTemplate() {
+  if (await getSetting('templateSeeded')) return;
+  if ((await db.templateBlocks.count()) === 0) await db.templateBlocks.bulkAdd(DEFAULT_TEMPLATE);
+  await setSetting('templateSeeded', true);
 }
 
 /** Stage 2: the two built-in goals, in order: safety buffer, then one month of needs. */

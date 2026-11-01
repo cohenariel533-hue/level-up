@@ -83,6 +83,49 @@ export interface MoneyCheck {
   note: string;
 }
 
+// ---------- Week & Today (stage 3) ----------
+
+/** The part of life a block belongs to. Drives its color, icon and which ring it feeds. */
+export type Pillar = 'school' | 'gym' | 'hustle' | 'youtube' | 'review' | 'rest' | 'other';
+
+/** One block in the weekly template, e.g. "Gym, Sunday 17:00, 75 min". */
+export interface TemplateBlock {
+  id?: number;
+  /** 0 = Sunday … 6 = Saturday */
+  day: number;
+  title: string;
+  pillar: Pillar;
+  /** "HH:mm", or null for an untimed block like "Rest". */
+  start: string | null;
+  minutes: number;
+}
+
+/** A real class. Shows as a locked school block on its day. */
+export interface ClassSlot {
+  id?: number;
+  name: string;
+  day: number;
+  start: string;
+  end: string;
+}
+
+/** A block ticked off on a given day, with a snapshot so later template edits don't rewrite history. */
+export interface DoneBlock {
+  /** "tpl-12" for a template block, "class-3" for a class. */
+  key: string;
+  pillar: Pillar;
+  minutes: number;
+}
+
+/** What happened on one calendar day. */
+export interface DayLog {
+  /** "YYYY-MM-DD" */
+  date: string;
+  /** "The one thing that matters today" */
+  focus: string;
+  done: DoneBlock[];
+}
+
 export class LevelUpDB extends Dexie {
   settings!: Table<SettingRow, string>;
   incomes!: Table<Income, number>;
@@ -91,6 +134,9 @@ export class LevelUpDB extends Dexie {
   savingsMoves!: Table<SavingsMove, number>;
   waitlist!: Table<WaitItem, number>;
   moneyChecks!: Table<MoneyCheck, string>;
+  templateBlocks!: Table<TemplateBlock, number>;
+  classes!: Table<ClassSlot, number>;
+  days!: Table<DayLog, string>;
 
   constructor(name = 'level-up') {
     super(name);
@@ -108,6 +154,13 @@ export class LevelUpDB extends Dexie {
       savingsMoves: '++id, date',
       waitlist: '++id, status, addedAt',
       moneyChecks: 'weekStart',
+    });
+
+    // v3 — Stage 3: weekly template, classes, daily focus + ticked blocks
+    this.version(3).stores({
+      templateBlocks: '++id, day',
+      classes: '++id, day',
+      days: 'date',
     });
   }
 }

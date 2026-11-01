@@ -1,0 +1,198 @@
+/* Styles for blocks on Today and Week. */
+
+/* S M T W T F S picker */
+.dayPicker {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  padding: 4px;
+  border-radius: 20px;
+}
+.dayButton {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 52px;
+  padding: 8px 0;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.dayButton[aria-pressed='true'] {
+  background: var(--glass-bg-strong);
+  color: var(--text);
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+}
+.todayDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* One block: [check] [time] [color bar] title / meta */
+.block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 2px;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: start;
+}
+.block + .block {
+  border-top: 1px solid var(--hairline);
+}
+button.block {
+  cursor: pointer;
+}
+.time {
+  flex-shrink: 0;
+  width: 46px;
+  font-size: 14px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+}
+.colorBar {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 4px;
+  min-height: 36px;
+  border-radius: 2px;
+  background: var(--item-color);
+}
+.info {
+  flex: 1;
+  min-width: 0;
+}
+.title {
+  display: block;
+  font-weight: 600;
+}
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-3);
+}
+.meta svg {
+  width: 13px;
+  height: 13px;
+}
+.dimmed {
+  opacity: 0.45;
+}
+.doneTitle {
+  color: var(--text-3);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--item-color) 70%, transparent);
+}
+
+/* The round tick on Today */
+.check {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 2px solid color-mix(in srgb, var(--item-color) 60%, transparent);
+  border-radius: 50%;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  transition: background 220ms var(--ease), border-color 220ms var(--ease), transform 160ms var(--ease);
+}
+.check:active {
+  transform: scale(0.9);
+}
+.check svg {
+  width: 17px;
+  height: 17px;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 200ms var(--ease), transform 260ms var(--ease);
+}
+.check[aria-checked='true'] {
+  border-color: var(--item-color);
+  background: var(--item-color);
+}
+.check[aria-checked='true'] svg {
+  opacity: 1;
+  transform: none;
+}
+
+/* Pillar chips in the block editor */
+.pillarGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pillarChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 6px 12px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  background: var(--glass-bg);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.pillarChip svg {
+  width: 16px;
+  height: 16px;
+  color: var(--item-color);
+}
+.pillarChip[aria-pressed='true'] {
+  border-color: var(--item-color);
+  background: color-mix(in srgb, var(--item-color) 18%, transparent);
+}
+
+.quickDurations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.quickDurations .btn {
+  min-height: 34px;
+  padding: 4px 12px;
+  font-size: 14px;
+}
+
+/* Focus line on Today */
+.focusInput {
+  width: 100%;
+  border: 0;
+  background: none;
+  outline: none;
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.focusInput::placeholder {
+  color: var(--text-3);
+  font-weight: 500;
+}
+
+.examRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hairline);
+}

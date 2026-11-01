@@ -1,30 +1,11 @@
 /**
  * Temporary screens for pillars that haven't been built yet. Each one moves
- * into its own folder (features/money/MoneyScreen.tsx etc.) in its stage.
+ * into its own folder (like features/money/ and features/week/) in its stage.
  */
-import { CalendarDays, Clapperboard, Dumbbell, NotebookPen, Rocket } from 'lucide-react';
+import { Clapperboard, Dumbbell, NotebookPen, Rocket } from 'lucide-react';
 import { ComingSoon } from '../components/ComingSoon';
 import { PageHeader } from '../components/ui';
 import { t } from '../i18n/en';
-
-export function WeekScreen() {
-  return (
-    <>
-      <PageHeader title={t.nav.week} />
-      <ComingSoon
-        stage={3}
-        icon={CalendarDays}
-        color="var(--c-school)"
-        title="Your ideal week"
-        features={[
-          'Editable Sunday–Saturday template',
-          'Real class times as locked school blocks',
-          'Export to Apple Calendar (.ics)',
-        ]}
-      />
-    </>
-  );
-}
 
 export function HustleScreen() {
   return (

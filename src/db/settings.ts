@@ -20,6 +20,9 @@ export interface AppSettings {
   hustleSplit: HustleSplit;
   /** Your own need/fun choice per category, overriding the defaults (stage 2). */
   categoryKinds: Record<string, 'need' | 'fun'>;
+
+  /** Set once the default weekly template has been added (stage 3). */
+  templateSeeded: boolean;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -30,6 +33,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   budgetSplit: DEFAULT_BUDGET_SPLIT,
   hustleSplit: DEFAULT_HUSTLE_SPLIT,
   categoryKinds: {},
+  templateSeeded: false,
 };
 
 export async function getSetting<K extends keyof AppSettings>(key: K): Promise<AppSettings[K]> {

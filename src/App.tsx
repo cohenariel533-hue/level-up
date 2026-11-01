@@ -4,9 +4,10 @@ import { ToastProvider } from './components/ui';
 import MoneyCheckScreen from './features/money/MoneyCheckScreen';
 import MoneyScreen from './features/money/MoneyScreen';
 import MoreScreen from './features/more/MoreScreen';
-import { GymScreen, HustleScreen, ReviewScreen, WeekScreen, YouTubeScreen } from './features/placeholders';
+import { GymScreen, HustleScreen, ReviewScreen, YouTubeScreen } from './features/placeholders';
 import SettingsScreen from './features/settings/SettingsScreen';
 import TodayScreen from './features/today/TodayScreen';
+import WeekScreen from './features/week/WeekScreen';
 import { useThemeSync } from './hooks/useThemeSync';
 
 export default function App() {
