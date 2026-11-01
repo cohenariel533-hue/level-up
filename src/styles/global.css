@@ -1,0 +1,139 @@
+/* Base page styles, layout helpers and the animated background. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* The page color lives on <html> only. <body> stays transparent so the
+   ambient glows (z-index -1) can show through behind the glass. */
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--bg);
+  transition: background var(--dur) var(--ease);
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+  transition: color var(--dur) var(--ease);
+}
+
+h1, h2, h3, p, ul {
+  margin: 0;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* 16px+ inputs stop iOS Safari from zooming in when you tap a field */
+input, select, textarea {
+  font-size: 16px;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Ambient background: three slow-drifting colored glows ---------- */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ambient span {
+  position: absolute;
+  width: 70vmax;
+  height: 70vmax;
+  border-radius: 50%;
+  animation: drift 30s ease-in-out infinite alternate;
+}
+.ambient span:nth-child(1) {
+  top: -30vmax;
+  left: -25vmax;
+  background: radial-gradient(circle, var(--blob-1) 0%, transparent 65%);
+}
+.ambient span:nth-child(2) {
+  bottom: -35vmax;
+  right: -30vmax;
+  background: radial-gradient(circle, var(--blob-2) 0%, transparent 65%);
+  animation-delay: -10s;
+}
+.ambient span:nth-child(3) {
+  top: 25%;
+  left: 35%;
+  width: 50vmax;
+  height: 50vmax;
+  background: radial-gradient(circle, var(--blob-3) 0%, transparent 65%);
+  animation-delay: -20s;
+}
+@keyframes drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(6vmax, 4vmax, 0) scale(1.12); }
+}
+
+/* Every screen fades up gently when you switch to it */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+/* ---------- Layout helpers ---------- */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap, 16px);
+}
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap, 10px);
+}
+.muted { color: var(--text-2); }
+.faint { color: var(--text-3); }
+.small { font-size: 14px; }
+.eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Respect "Reduce Motion" in iOS / macOS settings */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
