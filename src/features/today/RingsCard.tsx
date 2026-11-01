@@ -1,8 +1,9 @@
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, Timer } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { GlassCard, ProgressRing, Toggle } from '../../components/ui';
 import { setSetting } from '../../db/settings';
 import { t } from '../../i18n/en';
-import { formatHours } from '../../lib/time';
+import { formatDuration, formatHours } from '../../lib/time';
 import s from '../week/week.module.css';
 import type { WeekRings } from './useWeekProgress';
 
@@ -38,6 +39,19 @@ export function RingsCard({ rings }: { rings: WeekRings }) {
           display={moneyCheckDone ? '✓' : '—'}
         />
       </div>
+
+      {rings.timerRunningSince && (
+        <Link
+          to="/hustle"
+          className="chip"
+          style={{ ['--item-color' as string]: 'var(--c-hustle)', marginTop: 14, gap: 6, textDecoration: 'none' }}
+        >
+          <Timer size={14} aria-hidden="true" />
+          {t.hustle.timerOnToday(
+            formatDuration(Math.max(1, Math.round((Date.now() - new Date(rings.timerRunningSince).getTime()) / 60_000))),
+          )}
+        </Link>
+      )}
 
       {gymMinimumMet && (
         <p className="small" style={{ marginTop: 14, color: 'var(--c-gym)' }}>

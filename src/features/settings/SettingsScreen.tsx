@@ -7,7 +7,7 @@ import { setSetting, useSetting, type ThemePref } from '../../db/settings';
 import { t } from '../../i18n/en';
 import { daysSince, formatShortDate } from '../../lib/dates';
 
-const APP_VERSION = '0.3.0 · Stage 3';
+const APP_VERSION = '0.4.0 · Stage 4';
 
 export default function SettingsScreen() {
   const theme = useSetting('theme');

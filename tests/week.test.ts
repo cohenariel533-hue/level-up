@@ -39,12 +39,22 @@ describe('targets', () => {
   });
 
   it('adds up ticked blocks across the week', () => {
-    const progress = weekProgress([
-      { done: [{ key: 'tpl-1', pillar: 'gym', minutes: 75 }, { key: 'tpl-2', pillar: 'hustle', minutes: 90 }] },
-      { done: [{ key: 'tpl-3', pillar: 'youtube', minutes: 60 }, { key: 'tpl-4', pillar: 'hustle', minutes: 240 }] },
-      { done: [{ key: 'class-1', pillar: 'school', minutes: 90 }] },
-    ]);
-    expect(progress).toEqual({ gym: 1, hustleMinutes: 330, youtube: 1 });
+    const days = [
+      { date: '2026-11-01', done: [{ key: 'tpl-1', pillar: 'gym' as const, minutes: 75 }, { key: 'tpl-2', pillar: 'hustle' as const, minutes: 90 }] },
+      { date: '2026-11-02', done: [{ key: 'tpl-3', pillar: 'youtube' as const, minutes: 60 }, { key: 'tpl-4', pillar: 'hustle' as const, minutes: 240 }] },
+      { date: '2026-11-03', done: [{ key: 'class-1', pillar: 'school' as const, minutes: 90 }] },
+    ];
+    expect(weekProgress(days)).toEqual({ gym: 1, hustleMinutes: 330, youtube: 1 });
+  });
+
+  it('uses timer minutes instead of ticked blocks on days the timer ran', () => {
+    const days = [
+      { date: '2026-11-01', done: [{ key: 'tpl-2', pillar: 'hustle' as const, minutes: 90 }] },
+      { date: '2026-11-02', done: [{ key: 'tpl-4', pillar: 'hustle' as const, minutes: 240 }] },
+    ];
+    // Timed 70 min on the 1st (replaces the 90 ticked), 30 min on the 3rd (nothing ticked).
+    const timer = { '2026-11-01': 70, '2026-11-03': 30 };
+    expect(weekProgress(days, timer).hustleMinutes).toBe(70 + 240 + 30);
   });
 });
 

@@ -2,30 +2,10 @@
  * Temporary screens for pillars that haven't been built yet. Each one moves
  * into its own folder (like features/money/ and features/week/) in its stage.
  */
-import { Clapperboard, Dumbbell, NotebookPen, Rocket } from 'lucide-react';
+import { Clapperboard, Dumbbell, NotebookPen } from 'lucide-react';
 import { ComingSoon } from '../components/ComingSoon';
 import { PageHeader } from '../components/ui';
 import { t } from '../i18n/en';
-
-export function HustleScreen() {
-  return (
-    <>
-      <PageHeader title={t.nav.hustle} />
-      <ComingSoon
-        stage={4}
-        icon={Rocket}
-        color="var(--c-hustle)"
-        title="Gift-site business"
-        features={[
-          'Orders board: Lead → Paid → Building → Delivered → Review',
-          'Start/stop hours timer',
-          'Earnings, customers and ₪ per hour',
-          '90-day goal: 10 customers and ₪1,500 by 31 Jan 2027',
-        ]}
-      />
-    </>
-  );
-}
 
 export function GymScreen() {
   return (

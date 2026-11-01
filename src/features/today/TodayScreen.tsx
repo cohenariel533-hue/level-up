@@ -10,7 +10,7 @@ import { useWeekProgress } from './useWeekProgress';
 export default function TodayScreen() {
   const now = new Date();
   const date = todayISO();
-  const rings = useWeekProgress(now);
+  const rings = useWeekProgress();
 
   return (
     <>

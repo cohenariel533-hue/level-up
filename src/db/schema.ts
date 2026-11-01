@@ -126,6 +126,41 @@ export interface DayLog {
   done: DoneBlock[];
 }
 
+// ---------- Side hustle (stage 4) ----------
+
+export type OrderStatus = 'lead' | 'paid' | 'building' | 'delivered' | 'reviewed';
+export type Occasion = 'anniversary' | 'birthday' | 'proposal' | 'business' | 'other';
+export type PackageId = 'basic' | 'premium' | 'business';
+
+/** One gift-website order on the board. */
+export interface Order {
+  id?: number;
+  client: string;
+  occasion: Occasion;
+  package: PackageId;
+  rush: boolean;
+  price: number;
+  /** ISO date, or null when there's no deadline yet. */
+  deadline: string | null;
+  notes: string;
+  status: OrderStatus;
+  paid: boolean;
+  paidAt?: string;
+  /** The side-hustle income entry created in Money when it was paid. */
+  incomeId?: number;
+  createdAt: string;
+}
+
+/** A stretch of hustle work from the timer (or added by hand). */
+export interface HustleSession {
+  id?: number;
+  /** ISO timestamp */
+  start: string;
+  /** ISO timestamp, or null while the timer is running. */
+  end: string | null;
+  orderId?: number;
+}
+
 export class LevelUpDB extends Dexie {
   settings!: Table<SettingRow, string>;
   incomes!: Table<Income, number>;
@@ -137,6 +172,8 @@ export class LevelUpDB extends Dexie {
   templateBlocks!: Table<TemplateBlock, number>;
   classes!: Table<ClassSlot, number>;
   days!: Table<DayLog, string>;
+  orders!: Table<Order, number>;
+  hustleSessions!: Table<HustleSession, number>;
 
   constructor(name = 'level-up') {
     super(name);
@@ -161,6 +198,12 @@ export class LevelUpDB extends Dexie {
       templateBlocks: '++id, day',
       classes: '++id, day',
       days: 'date',
+    });
+
+    // v4 — Stage 4: side hustle orders and the hours timer
+    this.version(4).stores({
+      orders: '++id, status, createdAt',
+      hustleSessions: '++id, start',
     });
   }
 }
