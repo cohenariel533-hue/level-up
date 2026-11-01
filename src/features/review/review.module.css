@@ -1,0 +1,102 @@
+/* Weekly review styles. */
+
+/* A minimum you can tick or untick */
+.minimum {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 2px;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.minimumRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.minimumRow + .minimumRow {
+  border-top: 1px solid var(--hairline);
+}
+.tick {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border: 2px solid color-mix(in srgb, var(--c-review) 55%, transparent);
+  border-radius: 50%;
+  color: #fff;
+  transition: background 220ms var(--ease), border-color 220ms var(--ease);
+}
+.tick svg {
+  width: 16px;
+  height: 16px;
+  opacity: 0;
+  transition: opacity 200ms var(--ease);
+}
+.minimum[aria-checked='true'] .tick {
+  border-color: var(--c-review);
+  background: var(--c-review);
+}
+.minimum[aria-checked='true'] .tick svg {
+  opacity: 1;
+}
+.minimumText {
+  flex: 1;
+  font-weight: 560;
+}
+
+.hitCount {
+  margin-top: 12px;
+  color: var(--c-review);
+  font-weight: 650;
+}
+
+/* Goals: one input per pillar with a colored dot */
+.goalRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.goalRow + .goalRow {
+  margin-top: 10px;
+}
+.goalLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  width: 76px;
+  font-size: 14px;
+  font-weight: 650;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--item-color);
+}
+
+/* Read-only goal list (last week's goals, Today card) */
+.goalList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+.goalList li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.goalList strong {
+  flex-shrink: 0;
+  width: 64px;
+  font-size: 13px;
+  color: var(--item-color);
+}

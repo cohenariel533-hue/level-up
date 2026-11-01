@@ -2,6 +2,7 @@ import { PageHeader } from '../../components/ui';
 import { t } from '../../i18n/en';
 import { formatLongDate, greetingFor, todayISO } from '../../lib/dates';
 import { FocusCard } from './FocusCard';
+import { ReviewCard } from './ReviewCard';
 import { RingsCard } from './RingsCard';
 import { TodayBlocks } from './TodayBlocks';
 import { useWeekProgress } from './useWeekProgress';
@@ -18,6 +19,7 @@ export default function TodayScreen() {
 
       <div className="stack">
         <FocusCard date={date} />
+        <ReviewCard />
         {rings && <RingsCard rings={rings} />}
         <TodayBlocks date={date} weekday={now.getDay()} />
       </div>

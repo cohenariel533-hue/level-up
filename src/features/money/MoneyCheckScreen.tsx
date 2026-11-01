@@ -1,8 +1,8 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { ArrowDownToLine, ChevronLeft } from 'lucide-react';
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Field, GlassCard, PageHeader, ProgressBar, Segmented, useToast } from '../../components/ui';
+import { Button, Field, PageHeader, ProgressBar, Segmented, StepCard, useToast } from '../../components/ui';
 import { saveMoneyCheck } from '../../db/money';
 import { db } from '../../db/schema';
 import { t } from '../../i18n/en';
@@ -107,7 +107,7 @@ export default function MoneyCheckScreen() {
       <PageHeader eyebrow={t.money.check.weekOf(formatShortDate(startISO))} title={t.money.check.title} />
 
       <div className="stack">
-        <Step number={1} title={t.money.check.step1}>
+        <StepCard number={1} title={t.money.check.step1}>
           {planTotal === 0 ? (
             <p className="muted">{t.money.check.noPlan}</p>
           ) : (
@@ -125,9 +125,9 @@ export default function MoneyCheckScreen() {
               </p>
             </>
           )}
-        </Step>
+        </StepCard>
 
-        <Step number={2} title={t.money.check.step2}>
+        <StepCard number={2} title={t.money.check.step2}>
           <div className="stack" style={{ '--gap': '12px' } as CSSProperties}>
             <p className="muted small">{t.money.check.movedThisWeek(formatILS(Math.max(data.movedThisWeek, 0)))}</p>
             <Segmented<'yes' | 'no'>
@@ -145,9 +145,9 @@ export default function MoneyCheckScreen() {
               </Button>
             )}
           </div>
-        </Step>
+        </StepCard>
 
-        <Step number={3} title={t.money.check.step3}>
+        <StepCard number={3} title={t.money.check.step3}>
           <div className="stack" style={{ '--gap': '12px' } as CSSProperties}>
             {data.topLeak && (
               <button
@@ -169,7 +169,7 @@ export default function MoneyCheckScreen() {
               <textarea className="input" rows={2} value={note} onChange={(e) => setNote(e.target.value)} />
             </Field>
           </div>
-        </Step>
+        </StepCard>
 
         <Button variant="primary" size="lg" block onClick={finish} disabled={moved === undefined}>
           {data.existing ? t.money.check.update : t.money.check.finish}
@@ -183,18 +183,6 @@ export default function MoneyCheckScreen() {
         suggestion={data.savingsStillToMove}
       />
     </>
-  );
-}
-
-function Step({ number, title, children }: { number: number; title: string; children: ReactNode }) {
-  return (
-    <GlassCard>
-      <div className={s.step}>
-        <span className={s.stepNumber}>{number}</span>
-        <h2 className="card-title">{title}</h2>
-      </div>
-      {children}
-    </GlassCard>
   );
 }
 

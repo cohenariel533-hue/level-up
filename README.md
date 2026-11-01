@@ -44,9 +44,9 @@ tests/            Vitest tests
 ## Build stages
 
 1. ✅ Shell, navigation, design system, local storage, JSON backup
-2. Money
-3. Today + Week (.ics export)
-4. Side hustle
-5. Gym
+2. ✅ Money
+3. ✅ Today + Week (.ics export)
+4. ✅ Side hustle
+5. ✅ Gym
 6. ~~YouTube~~ (dropped)
-7. Weekly review
+7. ✅ Weekly review

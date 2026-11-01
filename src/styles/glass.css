@@ -65,6 +65,8 @@
   border-radius: var(--radius-pill);
   font-size: 15px;
   font-weight: 600;
+  text-decoration: none; /* also used on <Link> */
+  white-space: nowrap;
   cursor: pointer;
   user-select: none;
   transition: transform 160ms var(--ease), background var(--dur) var(--ease), opacity var(--dur);
@@ -455,6 +457,26 @@ select.input {
 @keyframes shake {
   20%, 60% { transform: translateX(-8px); }
   40%, 80% { transform: translateX(8px); }
+}
+
+/* ---------- Numbered steps (StepCard) ---------- */
+.step-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.step-number {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--item-color) 20%, transparent);
+  color: var(--item-color);
+  font-size: 14px;
+  font-weight: 750;
 }
 
 /* ---------- Floating action button ---------- */

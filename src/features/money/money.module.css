@@ -185,24 +185,7 @@
   text-align: end;
 }
 
-/* Money check: numbered steps */
-.step {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-.stepNumber {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--c-money) 20%, transparent);
-  color: var(--c-money);
-  font-size: 14px;
-  font-weight: 750;
-}
+/* Money check */
 .message {
   margin-top: 14px;
   color: var(--text-2);

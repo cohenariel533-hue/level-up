@@ -185,6 +185,26 @@ export interface Workout {
   createdAt: string;
 }
 
+// ---------- Weekly review (stage 7) ----------
+
+/** The four areas a weekly review checks and sets goals for. */
+export type ReviewPillar = 'school' | 'gym' | 'hustle' | 'money';
+
+/** One Saturday review, saved per week. */
+export interface WeeklyReview {
+  /** ISO date of the Sunday that starts the reviewed week. */
+  weekStart: string;
+  completedAt: string;
+  /** Did I hit the minimum? Pre-filled from the week's data, adjustable by hand. */
+  minimums: Record<ReviewPillar, boolean>;
+  /** The numbers behind the minimums, as they were when the review was saved. */
+  stats: { schoolDone: number; schoolPlanned: number; gymSessions: number; hustleHours: number };
+  wins: string;
+  obstacles: string;
+  /** Next week's single most important goal per pillar. */
+  nextGoals: Record<ReviewPillar, string>;
+}
+
 export class LevelUpDB extends Dexie {
   settings!: Table<SettingRow, string>;
   incomes!: Table<Income, number>;
@@ -199,6 +219,7 @@ export class LevelUpDB extends Dexie {
   orders!: Table<Order, number>;
   hustleSessions!: Table<HustleSession, number>;
   workouts!: Table<Workout, number>;
+  reviews!: Table<WeeklyReview, string>;
 
   constructor(name = 'level-up') {
     super(name);
@@ -251,6 +272,11 @@ export class LevelUpDB extends Dexie {
             d.done = d.done.filter((x) => (x.pillar as string) !== 'youtube');
           });
       });
+
+    // v7 — Stage 7: weekly reviews
+    this.version(7).stores({
+      reviews: 'weekStart',
+    });
   }
 }
 

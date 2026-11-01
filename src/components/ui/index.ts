@@ -10,5 +10,6 @@ export { ProgressBar } from './ProgressBar';
 export { ProgressRing } from './ProgressRing';
 export { Segmented } from './Segmented';
 export { Sheet } from './Sheet';
+export { StepCard } from './StepCard';
 export { ToastProvider, useToast } from './Toast';
 export { Toggle } from './Toggle';

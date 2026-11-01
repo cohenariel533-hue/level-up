@@ -89,7 +89,6 @@ export const en = {
     resetDone: 'Default week restored',
   },
 
-  comingSoon: 'Coming in stage',
 
   more: {
     title: 'More',
@@ -411,6 +410,50 @@ export const en = {
     noWorkouts: 'No workouts yet. Tap + after your next session.',
     exercisesCount: (n: number) => (n === 1 ? '1 exercise' : `${n} exercises`),
     bestsTitle: 'Personal bests',
+  },
+
+  review: {
+    title: 'Weekly review',
+    eyebrow: (week: string) => `Week of ${week} · about 30 minutes`,
+    pillars: { school: 'School', gym: 'Gym', hustle: 'Hustle', money: 'Money' },
+    reviewThisWeek: 'Review this week instead',
+    backToThisWeek: 'Back to this week',
+
+    step1: 'Did I hit the minimums?',
+    minimumSchool: (done: number, planned: number) =>
+      planned > 0 ? `School blocks: ${done} of ${planned} ticked` : 'School blocks: none planned this week',
+    minimumGym: (n: number, min: number) => `Gym: ${n} of ${min} sessions`,
+    minimumHustle: (hours: number, min: number) => `Hustle: ${hours}h of ${min}h`,
+    minimumMoney: (done: boolean) => (done ? 'Money check: done' : 'Money check: not done yet'),
+    doMoneyCheck: 'Do it now',
+    adjustHint: 'Pre-ticked from what you logged. Tap to change anything the app missed.',
+    hitCount: (n: number) =>
+      n === 4 ? 'All four minimums. That’s a real week.' : n >= 2 ? `${n} of 4. Solid base to build on.` : `${n} of 4. Next week is a fresh start.`,
+
+    step2: 'Wins this week',
+    winsPlaceholder: 'Big or small. Finished a site, hit a new bench, stuck to the budget…',
+    step3: 'What got in the way?',
+    obstaclesPlaceholder: 'No judgement, just notes for next week.',
+    step4: 'Next week’s one goal per pillar',
+    goalPlaceholders: {
+      school: 'e.g. Finish chapter 4 summary',
+      gym: 'e.g. 4 sessions, bench 65kg',
+      hustle: 'e.g. Land 2 new orders',
+      money: 'e.g. Eating out under ₪200',
+    },
+    lastWeekGoals: 'What you aimed for this week',
+
+    save: 'Save review',
+    update: 'Update review',
+    saved: 'Review saved. Have a great week ✨',
+
+    historyTitle: 'Past reviews',
+    noHistory: 'Your saved reviews will show up here.',
+    historyRow: (hit: number) => `${hit} of 4 minimums`,
+
+    todayNudgeTitle: 'Weekly review',
+    todayNudge: 'It’s Saturday: 30 minutes to close the week and set next week’s goals.',
+    weekGoalsTitle: 'This week’s goals',
   },
 
   backup: {
