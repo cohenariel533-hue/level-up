@@ -2,25 +2,10 @@
  * Temporary screens for pillars that haven't been built yet. Each one moves
  * into its own folder (like features/money/ and features/week/) in its stage.
  */
-import { Clapperboard, Dumbbell, NotebookPen } from 'lucide-react';
+import { Clapperboard, NotebookPen } from 'lucide-react';
 import { ComingSoon } from '../components/ComingSoon';
 import { PageHeader } from '../components/ui';
 import { t } from '../i18n/en';
-
-export function GymScreen() {
-  return (
-    <>
-      <PageHeader title={t.nav.gym} />
-      <ComingSoon
-        stage={5}
-        icon={Dumbbell}
-        color="var(--c-gym)"
-        title="Beat last time"
-        features={['Log Upper / Lower / Full / Cardio', 'See your last numbers for every exercise', '4 a week (3 minimum) and a streak']}
-      />
-    </>
-  );
-}
 
 export function YouTubeScreen() {
   return (

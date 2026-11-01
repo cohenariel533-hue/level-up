@@ -32,19 +32,23 @@ export interface WeekProgress {
  * Hustle hours, per day: if the timer was used that day, its minutes count;
  * otherwise the ticked hustle blocks do. So ticking a block *and* timing it
  * never counts twice, and ticking still works on days you skip the timer.
- * (Stage 5 adds logged workouts as a gym source.)
+ *
+ * Gym works the same way: logged workouts count; on days with none logged,
+ * ticked gym blocks do (pass `gymSessionsByDate` from lib/gym).
  */
 export function weekProgress(
   days: { date: string; done: DoneBlock[] }[],
   timerMinutesByDate: Record<string, number> = {},
+  gymSessionsByDate?: Record<string, number>,
 ): WeekProgress {
   const progress: WeekProgress = { gym: 0, hustleMinutes: 0, youtube: 0 };
   const tickedHustle: Record<string, number> = {};
 
   for (const day of days) {
     for (const block of day.done) {
-      if (block.pillar === 'gym') progress.gym += 1;
-      else if (block.pillar === 'youtube') progress.youtube += 1;
+      if (block.pillar === 'gym') {
+        if (!gymSessionsByDate) progress.gym += 1;
+      } else if (block.pillar === 'youtube') progress.youtube += 1;
       else if (block.pillar === 'hustle') tickedHustle[day.date] = (tickedHustle[day.date] ?? 0) + block.minutes;
     }
   }
@@ -53,6 +57,10 @@ export function weekProgress(
   for (const date of dates) {
     const timer = timerMinutesByDate[date] ?? 0;
     progress.hustleMinutes += timer > 0 ? timer : (tickedHustle[date] ?? 0);
+  }
+
+  if (gymSessionsByDate) {
+    progress.gym = Object.values(gymSessionsByDate).reduce((a, b) => a + b, 0);
   }
   return progress;
 }

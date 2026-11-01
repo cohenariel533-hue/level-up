@@ -3,6 +3,7 @@ import { db } from '../../db/schema';
 import { getSetting } from '../../db/settings';
 import { useNow } from '../../hooks/useNow';
 import { toISODate, weekEnd, weekStart } from '../../lib/dates';
+import { gymSessionsByDate } from '../../lib/gym';
 import { minutesByDate } from '../../lib/hustle';
 import { weeklyTargets, weekProgress, type WeekProgress, type WeeklyTargets } from '../../lib/targets';
 
@@ -25,14 +26,15 @@ export function useWeekProgress(): WeekRings | undefined {
   const minute = Math.floor(now.getTime() / 60_000);
 
   return useLiveQuery(async () => {
-    const [days, examMode, moneyCheck, sessions] = await Promise.all([
+    const [days, examMode, moneyCheck, sessions, workouts] = await Promise.all([
       db.days.where('date').between(startISO, endISO, true, true).toArray(),
       getSetting('examMode'),
       db.moneyChecks.get(startISO),
       db.hustleSessions.where('start').aboveOrEqual(start.toISOString()).toArray(),
+      db.workouts.where('date').between(startISO, endISO, true, true).toArray(),
     ]);
     return {
-      progress: weekProgress(days, minutesByDate(sessions)),
+      progress: weekProgress(days, minutesByDate(sessions), gymSessionsByDate(workouts, days)),
       targets: weeklyTargets(examMode),
       examMode,
       moneyCheckDone: !!moneyCheck,

@@ -1,0 +1,86 @@
+/* Gym screen styles. */
+
+/* One exercise in the logger */
+.exercise {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  background: var(--glass-bg);
+}
+.exerciseTop {
+  display: flex;
+  gap: 8px;
+}
+.exerciseTop input {
+  flex: 1;
+}
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.numbers.cardio {
+  grid-template-columns: 1fr;
+}
+.number {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.number span {
+  padding-inline-start: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+.number input {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.last {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-3);
+}
+.better {
+  color: var(--c-gym);
+  font-weight: 650;
+}
+
+/* This week */
+.weekNumber {
+  font-size: 40px;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+}
+.streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--c-gym) 16%, transparent);
+  color: var(--c-gym);
+  font-weight: 700;
+}
+.streak svg {
+  width: 18px;
+  height: 18px;
+}
+
+.typeChip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--c-gym) 16%, transparent);
+  color: var(--c-gym);
+  font-size: 12px;
+  font-weight: 700;
+}

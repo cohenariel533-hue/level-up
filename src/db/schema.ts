@@ -161,6 +161,30 @@ export interface HustleSession {
   orderId?: number;
 }
 
+// ---------- Gym (stage 5) ----------
+
+export type WorkoutType = 'upper' | 'lower' | 'full' | 'cardio';
+
+/** One exercise in a workout: sets × reps × weight, or minutes for cardio. */
+export interface ExerciseEntry {
+  name: string;
+  sets: number;
+  reps: number;
+  /** kg; 0 for bodyweight */
+  weight: number;
+  /** Cardio only */
+  minutes?: number;
+}
+
+export interface Workout {
+  id?: number;
+  date: string;
+  type: WorkoutType;
+  exercises: ExerciseEntry[];
+  notes: string;
+  createdAt: string;
+}
+
 export class LevelUpDB extends Dexie {
   settings!: Table<SettingRow, string>;
   incomes!: Table<Income, number>;
@@ -174,6 +198,7 @@ export class LevelUpDB extends Dexie {
   days!: Table<DayLog, string>;
   orders!: Table<Order, number>;
   hustleSessions!: Table<HustleSession, number>;
+  workouts!: Table<Workout, number>;
 
   constructor(name = 'level-up') {
     super(name);
@@ -204,6 +229,11 @@ export class LevelUpDB extends Dexie {
     this.version(4).stores({
       orders: '++id, status, createdAt',
       hustleSessions: '++id, start',
+    });
+
+    // v5 — Stage 5: workouts
+    this.version(5).stores({
+      workouts: '++id, date, type',
     });
   }
 }
