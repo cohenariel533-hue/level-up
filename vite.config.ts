@@ -17,7 +17,7 @@ export default defineConfig({
       manifest: {
         name: 'Level Up',
         short_name: 'Level Up',
-        description: 'School, money, gym, YouTube and side hustle in one place.',
+        description: 'School, money, gym and side hustle in one place.',
         theme_color: '#07070c',
         background_color: '#07070c',
         display: 'standalone',
