@@ -1,4 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
+import { DEFAULT_BUDGET_SPLIT, DEFAULT_HUSTLE_SPLIT, type BudgetSplit, type HustleSplit } from '../lib/money';
 import { db } from './schema';
 
 export type ThemePref = 'dark' | 'light' | 'system';
@@ -12,6 +13,13 @@ export interface AppSettings {
   lastBackupAt: string | null;
   /** When the app was first opened on this device. */
   installedAt: string | null;
+
+  /** Allowance split, in percent (stage 2). */
+  budgetSplit: BudgetSplit;
+  /** Side-hustle income split until the safety buffer is full (stage 2). */
+  hustleSplit: HustleSplit;
+  /** Your own need/fun choice per category, overriding the defaults (stage 2). */
+  categoryKinds: Record<string, 'need' | 'fun'>;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -19,6 +27,9 @@ export const DEFAULT_SETTINGS: AppSettings = {
   examMode: false,
   lastBackupAt: null,
   installedAt: null,
+  budgetSplit: DEFAULT_BUDGET_SPLIT,
+  hustleSplit: DEFAULT_HUSTLE_SPLIT,
+  categoryKinds: {},
 };
 
 export async function getSetting<K extends keyof AppSettings>(key: K): Promise<AppSettings[K]> {

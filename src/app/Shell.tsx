@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import { useEffect, type CSSProperties, type ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { t } from '../i18n/en';
 import { MORE_ITEMS, SIDEBAR_ITEMS, TAB_ITEMS, type NavItem } from './nav';
@@ -12,6 +12,11 @@ export function Shell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   // On iPhone, the "More" tab stays highlighted while you're on Gym, YouTube, etc.
   const inMoreSection = MORE_ITEMS.some((i) => pathname.startsWith(i.path));
+
+  // Every new screen starts at the top, like a native app.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <div className={s.shell}>

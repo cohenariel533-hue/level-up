@@ -2,11 +2,12 @@ import { Download, HardDrive, Info, RotateCcw, Upload } from 'lucide-react';
 import { useRef, useState, type ChangeEvent, type CSSProperties } from 'react';
 import { Button, GlassCard, ListRow, PageHeader, Segmented, Sheet, useToast } from '../../components/ui';
 import { eraseAllData, exportBackup, parseBackup, restoreBackup, type Backup } from '../../db/backup';
+import { initDatabase } from '../../db/seed';
 import { setSetting, useSetting, type ThemePref } from '../../db/settings';
 import { t } from '../../i18n/en';
 import { daysSince, formatShortDate } from '../../lib/dates';
 
-const APP_VERSION = '0.1.0 · Stage 1';
+const APP_VERSION = '0.2.0 · Stage 2';
 
 export default function SettingsScreen() {
   const theme = useSetting('theme');
@@ -47,6 +48,7 @@ export default function SettingsScreen() {
     if (!pending) return;
     try {
       await restoreBackup(pending.backup);
+      await initDatabase(); // an older backup may lack newer defaults (e.g. savings goals)
       toast(t.settings.restored);
     } catch {
       setImportError(t.backup.errRestore);

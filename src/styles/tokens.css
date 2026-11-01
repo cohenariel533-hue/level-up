@@ -29,6 +29,11 @@
   --c-youtube: #ff6b9a;
   --c-review: #2dd4bf;
   --c-neutral: #8e8ea0;
+
+  /* Money buckets. "Over budget" uses the warm amber, never alarm red. */
+  --c-needs: #5aa9ff;
+  --c-fun: #ffc145;
+  --c-over: #ffb057;
 }
 
 /* ---------- Dark (default) ---------- */
@@ -46,7 +51,7 @@
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-highlight: rgba(255, 255, 255, 0.14);
   --glass-shadow: 0 12px 32px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.25);
-  --sheet-bg: rgba(26, 26, 36, 0.86);
+  --sheet-bg: rgba(22, 22, 30, 0.985);
 
   --hairline: rgba(255, 255, 255, 0.07);
   --track: rgba(255, 255, 255, 0.08);
@@ -73,7 +78,7 @@
   --glass-border: rgba(0, 0, 0, 0.06);
   --glass-highlight: rgba(255, 255, 255, 0.9);
   --glass-shadow: 0 10px 28px rgba(40, 40, 80, 0.08), 0 1px 3px rgba(40, 40, 80, 0.06);
-  --sheet-bg: rgba(250, 250, 252, 0.9);
+  --sheet-bg: rgba(250, 250, 252, 0.985);
 
   --hairline: rgba(0, 0, 0, 0.06);
   --track: rgba(0, 0, 0, 0.06);

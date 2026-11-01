@@ -1,14 +1,18 @@
+import { SAFETY_BUFFER_TARGET } from '../lib/money';
+import { db } from './schema';
 import { getSetting, setSetting } from './settings';
 
 /**
- * Runs once at startup. Fills in first-run data and asks the browser to keep
- * our storage. Later stages add their defaults here (weekly template, money
- * categories, the first YouTube video…), each guarded so it only runs once.
+ * Runs at startup (and after a backup restore). Fills in first-run data and
+ * asks the browser to keep our storage. Each stage adds its defaults here,
+ * each guarded so it only runs when that data is missing.
  */
 export async function initDatabase(): Promise<void> {
   if (!(await getSetting('installedAt'))) {
     await setSetting('installedAt', new Date().toISOString());
   }
+
+  await seedSavingsGoals();
 
   // Ask the browser not to clear our data when the device is low on space.
   try {
@@ -18,4 +22,13 @@ export async function initDatabase(): Promise<void> {
   } catch {
     // Not supported everywhere, and that's fine.
   }
+}
+
+/** Stage 2: the two built-in goals, in order: safety buffer, then one month of needs. */
+async function seedSavingsGoals() {
+  if ((await db.savingsGoals.count()) > 0) return;
+  await db.savingsGoals.bulkAdd([
+    { name: 'Safety buffer', target: SAFETY_BUFFER_TARGET, kind: 'buffer', order: 1 },
+    { name: 'One month of needs', target: null, kind: 'month', order: 2 },
+  ]);
 }

@@ -5,6 +5,11 @@
   padding: calc(env(safe-area-inset-top) + 20px) 16px calc(env(safe-area-inset-bottom) + 112px);
 }
 
+/* Screens with a floating + button get extra room so it never covers the last card */
+.main:has(:global(.fab)) {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 176px);
+}
+
 .page {
   max-width: 720px;
   margin-inline: auto;
@@ -78,9 +83,10 @@
     border-radius: var(--radius-lg);
   }
 
-  .main {
+  .main,
+  .main:has(:global(.fab)) {
     margin-inline-start: 268px;
-    padding: 40px 32px 48px;
+    padding: 40px 32px 112px;
   }
 }
 

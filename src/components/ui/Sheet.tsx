@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
 interface Props {
@@ -13,6 +13,11 @@ interface Props {
  * Closes on backdrop tap or Escape. Used for confirmations and quick-add forms.
  */
 export function Sheet({ open, onClose, title, children }: Props) {
+  // Close on a backdrop tap only if the press also *started* on the backdrop.
+  // Otherwise the tap that opened the sheet can land on the new backdrop and
+  // close it straight away (and a text-selection drag could close it too).
+  const pressStartedOnBackdrop = useRef(false);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
@@ -29,14 +34,15 @@ export function Sheet({ open, onClose, title, children }: Props) {
   if (!open) return null;
 
   return createPortal(
-    <div className="sheet-backdrop" onClick={onClose}>
-      <div
-        className="glass sheet"
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div
+      className="sheet-backdrop"
+      onPointerDown={(e) => (pressStartedOnBackdrop.current = e.target === e.currentTarget)}
+      onClick={(e) => {
+        if (e.target === e.currentTarget && pressStartedOnBackdrop.current) onClose();
+        pressStartedOnBackdrop.current = false;
+      }}
+    >
+      <div className="glass sheet" role="dialog" aria-modal="true" aria-label={title}>
         <div className="sheet-grabber" />
         {title && <h2 className="sheet-title">{title}</h2>}
         {children}

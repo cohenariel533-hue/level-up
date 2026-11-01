@@ -1,4 +1,13 @@
-import { differenceInCalendarDays, endOfWeek, format, parseISO, startOfWeek } from 'date-fns';
+import {
+  addMonths,
+  differenceInCalendarDays,
+  endOfMonth,
+  endOfWeek,
+  format,
+  getDaysInMonth,
+  parseISO,
+  startOfWeek,
+} from 'date-fns';
 
 /** Weeks run Sunday → Saturday everywhere in the app. */
 export const WEEK_STARTS_ON = 0 as const;
@@ -18,6 +27,27 @@ export const formatLongDate = (d: Date = new Date()) => format(d, 'EEEE, d MMMM'
 
 /** e.g. "1 Nov 2026" */
 export const formatShortDate = (d: Date | string) => format(typeof d === 'string' ? parseISO(d) : d, 'd MMM yyyy');
+
+/** e.g. "Wed 4 Nov" */
+export const formatDayShort = (iso: string) => format(parseISO(iso), 'EEE d MMM');
+
+// ---------- Months, as "YYYY-MM" keys ----------
+
+export const monthKey = (d: Date = new Date()) => format(d, 'yyyy-MM');
+const monthStart = (key: string) => parseISO(`${key}-01`);
+
+/** First and last day of a month as ISO dates, for database range queries. */
+export function monthBounds(key: string) {
+  const start = monthStart(key);
+  return { first: toISODate(start), last: toISODate(endOfMonth(start)) };
+}
+
+export const shiftMonth = (key: string, delta: number) => monthKey(addMonths(monthStart(key), delta));
+
+/** e.g. "November 2026" */
+export const formatMonth = (key: string) => format(monthStart(key), 'MMMM yyyy');
+
+export const daysInMonthOf = (key: string) => getDaysInMonth(monthStart(key));
 
 /** Whole calendar days between an ISO date/timestamp and now (0 = today). */
 export const daysSince = (iso: string, now: Date = new Date()) => differenceInCalendarDays(now, parseISO(iso));

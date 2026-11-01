@@ -1,0 +1,209 @@
+/* Styles only the Money screens use. Shared pieces live in styles/glass.css. */
+
+/* ‹ November 2026 › */
+.monthSwitch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+}
+.monthSwitch span {
+  font-weight: 650;
+}
+.monthSwitch button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.monthSwitch button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.monthSwitch svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* The headline number in a card */
+.bigNumber {
+  margin: 2px 0 18px;
+  font-size: 40px;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.overNote {
+  margin: -10px 0 16px;
+  color: var(--c-over);
+  font-size: 14px;
+}
+
+/* Quick-add category grid: big targets, two taps on a phone */
+.catGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+@media (min-width: 520px) {
+  .catGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.catButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 76px;
+  padding: 10px 4px;
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  background: var(--glass-bg);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 140ms var(--ease), background var(--dur), border-color var(--dur);
+}
+.catButton:active {
+  transform: scale(0.95);
+}
+.catButton svg {
+  width: 24px;
+  height: 24px;
+  color: var(--item-color);
+}
+.catButton[aria-pressed='true'] {
+  border-color: var(--item-color);
+  background: color-mix(in srgb, var(--item-color) 16%, transparent);
+}
+
+.linkButton {
+  align-self: center;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px;
+}
+
+/* Expense rows */
+.dayLabel {
+  margin: 14px 2px 2px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+.dayLabel:first-child {
+  margin-top: 0;
+}
+.amount {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Two buttons side by side */
+.buttonPair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* 48-hour list items */
+.waitItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+}
+.waitItem + .waitItem {
+  border-top: 1px solid var(--hairline);
+}
+.waitInfo {
+  flex: 1;
+  min-width: 0;
+}
+.waitActions {
+  display: flex;
+  gap: 6px;
+}
+.waitActions .btn {
+  min-height: 36px;
+  padding: 6px 14px;
+  font-size: 14px;
+}
+
+/* Goal rows are tappable to edit */
+.goalButton {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: start;
+  cursor: pointer;
+}
+
+/* Hustle payment rows with a small remove button */
+.removeButton {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--track);
+  color: var(--text-3);
+  cursor: pointer;
+}
+.removeButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Split editor: label + % input per row */
+.splitRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.splitRow span {
+  flex: 1;
+  font-weight: 560;
+}
+.splitRow input {
+  width: 84px;
+  text-align: end;
+}
+
+/* Money check: numbered steps */
+.step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.stepNumber {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c-money) 20%, transparent);
+  color: var(--c-money);
+  font-size: 14px;
+  font-weight: 750;
+}
+.message {
+  margin-top: 14px;
+  color: var(--text-2);
+}

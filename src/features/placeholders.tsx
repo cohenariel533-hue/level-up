@@ -2,31 +2,10 @@
  * Temporary screens for pillars that haven't been built yet. Each one moves
  * into its own folder (features/money/MoneyScreen.tsx etc.) in its stage.
  */
-import { CalendarDays, Clapperboard, Dumbbell, NotebookPen, Rocket, Wallet } from 'lucide-react';
+import { CalendarDays, Clapperboard, Dumbbell, NotebookPen, Rocket } from 'lucide-react';
 import { ComingSoon } from '../components/ComingSoon';
 import { PageHeader } from '../components/ui';
 import { t } from '../i18n/en';
-
-export function MoneyScreen() {
-  return (
-    <>
-      <PageHeader title={t.nav.money} />
-      <ComingSoon
-        stage={2}
-        icon={Wallet}
-        color="var(--c-money)"
-        title="Every shekel, with a plan"
-        features={[
-          'Allowance and hustle income, auto-split 60 / 25 / 15',
-          'Two-tap expense entry with need/fun categories',
-          'What’s left in each bucket this month',
-          'Savings goals: ₪1,500 buffer first',
-          '48-hour rule wait list and the Saturday money check',
-        ]}
-      />
-    </>
-  );
-}
 
 export function WeekScreen() {
   return (
