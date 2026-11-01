@@ -2,29 +2,10 @@
  * Temporary screens for pillars that haven't been built yet. Each one moves
  * into its own folder (like features/money/ and features/week/) in its stage.
  */
-import { Clapperboard, NotebookPen } from 'lucide-react';
+import { NotebookPen } from 'lucide-react';
 import { ComingSoon } from '../components/ComingSoon';
 import { PageHeader } from '../components/ui';
 import { t } from '../i18n/en';
-
-export function YouTubeScreen() {
-  return (
-    <>
-      <PageHeader title={t.nav.youtube} />
-      <ComingSoon
-        stage={6}
-        icon={Clapperboard}
-        color="var(--c-youtube)"
-        title="Psychology & philosophy channel"
-        features={[
-          'Pipeline: Idea → Script → Voiceover → Edit → Uploaded',
-          'Separate lanes for long videos and Shorts',
-          'First up: “The Skill We Didn’t Notice We Lost”',
-        ]}
-      />
-    </>
-  );
-}
 
 export function ReviewScreen() {
   return (

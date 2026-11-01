@@ -7,7 +7,7 @@ export type ThemePref = 'dark' | 'light' | 'system';
 /** Every app-wide setting, with its type. Add new settings here. */
 export interface AppSettings {
   theme: ThemePref;
-  /** Exam mode lowers weekly targets (hustle 2 h, YouTube paused). Used from stage 3. */
+  /** Exam mode lowers weekly targets (hustle goal drops to 2 h). Used from stage 3. */
   examMode: boolean;
   /** When the last JSON backup was exported (ISO timestamp). */
   lastBackupAt: string | null;

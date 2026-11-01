@@ -86,7 +86,7 @@ export interface MoneyCheck {
 // ---------- Week & Today (stage 3) ----------
 
 /** The part of life a block belongs to. Drives its color, icon and which ring it feeds. */
-export type Pillar = 'school' | 'gym' | 'hustle' | 'youtube' | 'review' | 'rest' | 'other';
+export type Pillar = 'school' | 'gym' | 'hustle' | 'review' | 'rest' | 'other';
 
 /** One block in the weekly template, e.g. "Gym, Sunday 17:00, 75 min". */
 export interface TemplateBlock {
@@ -235,6 +235,22 @@ export class LevelUpDB extends Dexie {
     this.version(5).stores({
       workouts: '++id, date, type',
     });
+
+    // v6 — YouTube dropped from the app: remove its template blocks and ticks.
+    this.version(6)
+      .stores({})
+      .upgrade(async (tx) => {
+        await tx
+          .table('templateBlocks')
+          .filter((b) => b.pillar === 'youtube')
+          .delete();
+        await tx
+          .table('days')
+          .toCollection()
+          .modify((d: DayLog) => {
+            d.done = d.done.filter((x) => (x.pillar as string) !== 'youtube');
+          });
+      });
   }
 }
 

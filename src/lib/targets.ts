@@ -6,24 +6,21 @@ export interface WeeklyTargets {
   /** The "bare minimum" week; still counts as a win. */
   gymMinimum: number;
   hustleHours: number;
-  /** 0 = paused (exam mode). */
-  youtube: number;
 }
 
 /**
- * Normal weeks: gym 4, hustle 7 h, YouTube 2 blocks.
- * Exam mode: hustle drops to 2 h, YouTube pauses, gym stays.
+ * Normal weeks: gym 4, hustle 7 h.
+ * Exam mode: hustle drops to 2 h, gym stays.
  */
 export function weeklyTargets(examMode: boolean): WeeklyTargets {
   return examMode
-    ? { gym: 4, gymMinimum: 3, hustleHours: 2, youtube: 0 }
-    : { gym: 4, gymMinimum: 3, hustleHours: 7, youtube: 2 };
+    ? { gym: 4, gymMinimum: 3, hustleHours: 2 }
+    : { gym: 4, gymMinimum: 3, hustleHours: 7 };
 }
 
 export interface WeekProgress {
   gym: number;
   hustleMinutes: number;
-  youtube: number;
 }
 
 /**
@@ -41,15 +38,14 @@ export function weekProgress(
   timerMinutesByDate: Record<string, number> = {},
   gymSessionsByDate?: Record<string, number>,
 ): WeekProgress {
-  const progress: WeekProgress = { gym: 0, hustleMinutes: 0, youtube: 0 };
+  const progress: WeekProgress = { gym: 0, hustleMinutes: 0 };
   const tickedHustle: Record<string, number> = {};
 
   for (const day of days) {
     for (const block of day.done) {
       if (block.pillar === 'gym') {
         if (!gymSessionsByDate) progress.gym += 1;
-      } else if (block.pillar === 'youtube') progress.youtube += 1;
-      else if (block.pillar === 'hustle') tickedHustle[day.date] = (tickedHustle[day.date] ?? 0) + block.minutes;
+      } else if (block.pillar === 'hustle') tickedHustle[day.date] = (tickedHustle[day.date] ?? 0) + block.minutes;
     }
   }
 

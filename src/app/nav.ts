@@ -1,6 +1,5 @@
 import {
   CalendarDays,
-  Clapperboard,
   Dumbbell,
   LayoutGrid,
   NotebookPen,
@@ -32,7 +31,6 @@ export const TAB_ITEMS: NavItem[] = [
 /** Screens reached through "More" on iPhone (shown directly in the desktop sidebar). */
 export const MORE_ITEMS: NavItem[] = [
   { path: '/gym', label: t.nav.gym, icon: Dumbbell, color: 'var(--c-gym)' },
-  { path: '/youtube', label: t.nav.youtube, icon: Clapperboard, color: 'var(--c-youtube)' },
   { path: '/review', label: t.nav.review, icon: NotebookPen, color: 'var(--c-review)' },
   { path: '/settings', label: t.nav.settings, icon: Settings, color: 'var(--c-neutral)' },
 ];

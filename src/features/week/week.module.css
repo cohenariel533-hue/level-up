@@ -90,9 +90,6 @@ button.block {
   width: 13px;
   height: 13px;
 }
-.dimmed {
-  opacity: 0.45;
-}
 .doneTitle {
   color: var(--text-3);
   text-decoration: line-through;

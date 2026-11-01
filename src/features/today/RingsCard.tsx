@@ -7,7 +7,7 @@ import { formatDuration, formatHours } from '../../lib/time';
 import s from '../week/week.module.css';
 import type { WeekRings } from './useWeekProgress';
 
-/** The four weekly rings, plus the exam-mode switch that lowers the targets. */
+/** The three weekly rings, plus the exam-mode switch that lowers the targets. */
 export function RingsCard({ rings }: { rings: WeekRings }) {
   const { progress, targets, examMode, moneyCheckDone } = rings;
   const hustleHours = progress.hustleMinutes / 60;
@@ -23,13 +23,6 @@ export function RingsCard({ rings }: { rings: WeekRings }) {
           label={t.today.rings.hustle}
           color="var(--c-hustle)"
           display={`${formatHours(hustleHours)}/${targets.hustleHours}`}
-        />
-        <ProgressRing
-          value={progress.youtube}
-          max={targets.youtube}
-          label={t.today.rings.youtube}
-          color="var(--c-youtube)"
-          display={targets.youtube === 0 ? t.today.paused : undefined}
         />
         <ProgressRing
           value={moneyCheckDone ? 1 : 0}

@@ -101,7 +101,6 @@ export default function WeekScreen() {
               formatDuration(sum('school')),
               count('gym'),
               formatHours(sum('hustle') / 60),
-              count('youtube'),
             )}
           </p>
         </GlassCard>

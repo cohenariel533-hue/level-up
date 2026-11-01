@@ -19,7 +19,7 @@ export default function TodayScreen() {
       <div className="stack">
         <FocusCard date={date} />
         {rings && <RingsCard rings={rings} />}
-        <TodayBlocks date={date} weekday={now.getDay()} examMode={rings?.examMode ?? false} />
+        <TodayBlocks date={date} weekday={now.getDay()} />
       </div>
     </>
   );

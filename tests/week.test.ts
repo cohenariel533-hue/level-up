@@ -1,7 +1,8 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { DEFAULT_TEMPLATE } from '../src/db/defaultTemplate';
-import { db } from '../src/db/schema';
+import Dexie from 'dexie';
+import { db, LevelUpDB } from '../src/db/schema';
 import { initDatabase } from '../src/db/seed';
 import { setFocus, toggleBlockDone } from '../src/db/week';
 import { blocksForDay, weekEvents } from '../src/features/week/schedule';
@@ -33,18 +34,18 @@ describe('default template', () => {
 });
 
 describe('targets', () => {
-  it('lowers hustle and pauses YouTube in exam mode, keeping gym', () => {
-    expect(weeklyTargets(false)).toMatchObject({ gym: 4, hustleHours: 7, youtube: 2 });
-    expect(weeklyTargets(true)).toMatchObject({ gym: 4, hustleHours: 2, youtube: 0 });
+  it('lowers the hustle goal in exam mode, keeping gym', () => {
+    expect(weeklyTargets(false)).toEqual({ gym: 4, gymMinimum: 3, hustleHours: 7 });
+    expect(weeklyTargets(true)).toEqual({ gym: 4, gymMinimum: 3, hustleHours: 2 });
   });
 
   it('adds up ticked blocks across the week', () => {
     const days = [
       { date: '2026-11-01', done: [{ key: 'tpl-1', pillar: 'gym' as const, minutes: 75 }, { key: 'tpl-2', pillar: 'hustle' as const, minutes: 90 }] },
-      { date: '2026-11-02', done: [{ key: 'tpl-3', pillar: 'youtube' as const, minutes: 60 }, { key: 'tpl-4', pillar: 'hustle' as const, minutes: 240 }] },
+      { date: '2026-11-02', done: [{ key: 'tpl-3', pillar: 'review' as const, minutes: 30 }, { key: 'tpl-4', pillar: 'hustle' as const, minutes: 240 }] },
       { date: '2026-11-03', done: [{ key: 'class-1', pillar: 'school' as const, minutes: 90 }] },
     ];
-    expect(weekProgress(days)).toEqual({ gym: 1, hustleMinutes: 330, youtube: 1 });
+    expect(weekProgress(days)).toEqual({ gym: 1, hustleMinutes: 330 });
   });
 
   it('uses timer minutes instead of ticked blocks on days the timer ran', () => {
@@ -103,6 +104,36 @@ describe('.ics export', () => {
     const encoder = new TextEncoder();
     for (const line of folded.split('\r\n')) expect(encoder.encode(line).length).toBeLessThanOrEqual(75);
     expect(folded.split('\r\n').slice(1).every((l) => l.startsWith(' '))).toBe(true);
+  });
+});
+
+describe('dropping YouTube', () => {
+  it('the default template has no YouTube blocks', () => {
+    expect(DEFAULT_TEMPLATE.some((b) => (b.pillar as string) === 'youtube')).toBe(false);
+  });
+
+  it('upgrading an older database removes YouTube blocks and ticks', async () => {
+    // An app-version-5 database, with YouTube data in it.
+    const old = new Dexie('upgrade-test');
+    old.version(5).stores({ templateBlocks: '++id, day', days: 'date' });
+    await old.table('templateBlocks').bulkAdd([
+      { day: 1, title: 'YouTube: write script', pillar: 'youtube', start: '18:00', minutes: 60 },
+      { day: 1, title: 'Gym', pillar: 'gym', start: '17:00', minutes: 75 },
+    ]);
+    await old.table('days').add({
+      date: '2026-11-02',
+      focus: '',
+      done: [
+        { key: 'tpl-1', pillar: 'youtube', minutes: 60 },
+        { key: 'tpl-2', pillar: 'gym', minutes: 75 },
+      ],
+    });
+    old.close();
+
+    const upgraded = new LevelUpDB('upgrade-test');
+    expect((await upgraded.templateBlocks.toArray()).map((b) => b.title)).toEqual(['Gym']);
+    expect((await upgraded.days.get('2026-11-02'))?.done.map((d) => d.pillar)).toEqual(['gym']);
+    upgraded.close();
   });
 });
 

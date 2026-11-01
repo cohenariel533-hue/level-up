@@ -1,6 +1,6 @@
 # Level Up
 
-My personal life planner: school blocks, money, gym, YouTube and the side hustle.
+My personal life planner: school blocks, money, gym and the side hustle.
 Offline-first PWA, all data stored on the device (IndexedDB). Dark mode first, ₪, Sunday–Saturday weeks.
 
 ## Run it
@@ -48,5 +48,5 @@ tests/            Vitest tests
 3. Today + Week (.ics export)
 4. Side hustle
 5. Gym
-6. YouTube
+6. ~~YouTube~~ (dropped)
 7. Weekly review

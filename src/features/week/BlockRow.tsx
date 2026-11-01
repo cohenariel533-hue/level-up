@@ -1,8 +1,8 @@
 import { Check, Lock } from 'lucide-react';
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties } from 'react';
 import { t } from '../../i18n/en';
 import { formatDuration } from '../../lib/time';
-import { PILLARS } from './pillars';
+import { pillarStyle } from './pillars';
 import type { ScheduledBlock } from './schedule';
 import s from './week.module.css';
 
@@ -12,15 +12,11 @@ interface Props {
   onClick?: () => void;
   /** Today screen: a round tick to mark it done. */
   check?: { done: boolean; onToggle: () => void };
-  /** Shown faded, e.g. YouTube during exam mode. */
-  dimmed?: boolean;
-  /** Extra text on the meta line. */
-  note?: ReactNode;
 }
 
 /** One block on Today or Week: time, pillar color, title and length. */
-export function BlockRow({ block, onClick, check, dimmed, note }: Props) {
-  const pillar = PILLARS[block.pillar];
+export function BlockRow({ block, onClick, check }: Props) {
+  const pillar = pillarStyle(block.pillar);
   const style = { '--item-color': pillar.color } as CSSProperties;
 
   // Meta line, e.g. "Gym · 1h 15m". The type is skipped when the title already says it.
@@ -53,13 +49,12 @@ export function BlockRow({ block, onClick, check, dimmed, note }: Props) {
         <span className={s.meta}>
           {block.locked && <Lock aria-hidden="true" />}
           {meta.join(' · ')}
-          {note && <> · {note}</>}
         </span>
       </span>
     </>
   );
 
-  const className = `${s.block} ${dimmed ? s.dimmed : ''}`;
+  const className = s.block;
   return onClick ? (
     <button type="button" className={className} style={style} onClick={onClick}>
       {content}

@@ -10,7 +10,7 @@ import s from './Shell.module.css';
  */
 export function Shell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
-  // On iPhone, the "More" tab stays highlighted while you're on Gym, YouTube, etc.
+  // On iPhone, the "More" tab stays highlighted while you're on Gym, Review or Settings.
   const inMoreSection = MORE_ITEMS.some((i) => pathname.startsWith(i.path));
 
   // Every new screen starts at the top, like a native app.
