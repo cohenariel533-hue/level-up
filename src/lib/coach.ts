@@ -16,7 +16,7 @@
  * follow-ups sink for a while.
  */
 import { differenceInCalendarDays, parseISO, subDays } from 'date-fns';
-import type { DayMoves, ReviewPillar, StoredMove } from '../db/schema';
+import type { DayMoves, ReviewPillar, ShiftKind, StoredMove } from '../db/schema';
 import { t } from '../i18n/en';
 import { formatDayShort, toISODate } from './dates';
 import { formatILS } from './format';
@@ -85,6 +85,8 @@ export interface CoachContext {
   };
   study: Pick<StudyFeed, 'exams' | 'deadlines'> & { studiedTodayMin: number; plannedTodayMin: number } | null;
   review: { done: boolean; weekGoals: Record<ReviewPillar, string> | null };
+  /** This week's accepted 1% shift (lib/rhythm.ts), and whether its hustle session already happened. */
+  shift: { kind: ShiftKind; target?: string; weekday?: number; hustlePeakDone: boolean } | null;
 }
 
 export const kindOf = (id: string) => id.split(':')[0];
@@ -101,6 +103,7 @@ export function proposeMoves(ctx: CoachContext): Move[] {
     ...hustleMoves(ctx),
     ...moneyMoves(ctx),
     ...reviewMoves(ctx),
+    ...shiftMoves(ctx),
   ];
 }
 
@@ -113,7 +116,8 @@ function lifeMoves(ctx: CoachContext): Move[] {
   if (!ctx.focusSet && hour < 14) {
     moves.push({ id: 'focus', pillar: 'life', title: t.coach.m.setFocus, detail: t.coach.m.setFocusDetail, minutes: 1, auto: true, priority: 60 });
   }
-  if (ctx.profile.completedAt && hour >= 20) {
+  // (An accepted bedtime shift gives its own, more specific move instead.)
+  if (ctx.profile.completedAt && hour >= 20 && ctx.shift?.kind !== 'bed') {
     moves.push({ id: 'bedtime', pillar: 'life', title: t.coach.m.bedtime(ctx.profile.bedGoal), detail: t.coach.m.bedtimeDetail, minutes: 5, priority: 30 });
   }
   return moves;
@@ -317,6 +321,28 @@ function reviewMoves(ctx: CoachContext): Move[] {
     }
   }
   return moves;
+}
+
+/** Daily moves for this week's accepted 1% shift. */
+function shiftMoves(ctx: CoachContext): Move[] {
+  const s = ctx.shift;
+  if (!s) return [];
+  const hour = ctx.now.getHours();
+  const m = t.rhythm.moves;
+  if (s.kind === 'wake' && s.target && hour >= 19) {
+    return [{ id: 'shift-wake', pillar: 'life', title: m.alarm(s.target), detail: m.alarmDetail, minutes: 1, priority: 55 }];
+  }
+  if (s.kind === 'bed' && s.target && hour >= 20) {
+    return [{ id: 'shift-bed', pillar: 'life', title: m.phoneDown(s.target), detail: m.phoneDownDetail, minutes: 5, priority: 58 }];
+  }
+  if (s.kind === 'hustlePeak' && !s.hustlePeakDone) {
+    const peak = t.rhythm.peaks[ctx.profile.energyPeak];
+    return [{ id: 'shift-hustle-peak', pillar: 'hustle', title: m.hustlePeak(peak), detail: m.hustlePeakDetail, minutes: 45, to: '/hustle', auto: true, priority: 47 }];
+  }
+  if (s.kind === 'weakDay' && s.weekday === (ctx.now.getDay() + 1) % 7 && hour >= 18) {
+    return [{ id: 'shift-plan-tomorrow', pillar: 'life', title: m.planTomorrow(t.week.days[s.weekday]), detail: m.planTomorrowDetail, minutes: 2, to: '/week', priority: 50 }];
+  }
+  return [];
 }
 
 // ---------- learning from you ----------

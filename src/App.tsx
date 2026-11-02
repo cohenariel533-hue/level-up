@@ -8,15 +8,18 @@ import GymScreen from './features/gym/GymScreen';
 import HustleScreen from './features/hustle/HustleScreen';
 import ProfileScreen from './features/profile/ProfileScreen';
 import ReviewScreen from './features/review/ReviewScreen';
+import RhythmScreen from './features/rhythm/RhythmScreen';
 import SettingsScreen from './features/settings/SettingsScreen';
 import TodayScreen from './features/today/TodayScreen';
 import WeekScreen from './features/week/WeekScreen';
+import { useActivityTracking } from './hooks/useActivityTracking';
 import { useStudySync } from './hooks/useStudySync';
 import { useThemeSync } from './hooks/useThemeSync';
 
 export default function App() {
   useThemeSync();
   useStudySync();
+  useActivityTracking();
 
   return (
     <ToastProvider>
@@ -31,6 +34,7 @@ export default function App() {
           <Route path="/review" element={<ReviewScreen />} />
           <Route path="/review/:week" element={<ReviewScreen />} />
           <Route path="/more" element={<MoreScreen />} />
+          <Route path="/rhythm" element={<RhythmScreen />} />
           <Route path="/me" element={<ProfileScreen />} />
           <Route path="/settings" element={<SettingsScreen />} />
           <Route path="*" element={<Navigate to="/" replace />} />

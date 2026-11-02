@@ -30,6 +30,7 @@ function context(over: Partial<CoachContext> = {}): CoachContext {
     money: { month: '2026-11', allowanceSet: true, moneyCheckDone: false, funLeft: 300, funPlan: 500, waitReady: [], expensesToday: 1, watched: [] },
     study: { exams: [], deadlines: [], studiedTodayMin: 0, plannedTodayMin: 0 },
     review: { done: false, weekGoals: null },
+    shift: null,
     ...over,
   };
 }

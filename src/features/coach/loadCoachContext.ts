@@ -11,6 +11,7 @@ import { pathFacts, pathStatus } from '../../lib/hustlePath';
 import { buildProgram, headlineTarget, planSession, sessionSummary } from '../../lib/program';
 import { waitStatus } from '../../lib/money';
 import { previousWeek } from '../../lib/review';
+import { PEAK_WINDOWS } from '../../lib/rhythm';
 import { studyMinutesToday } from '../../lib/studyFeed';
 import { weeklyTargets, weekProgress } from '../../lib/targets';
 import { categoryLabel } from '../money/categories';
@@ -25,12 +26,13 @@ export async function loadCoachContext(now: Date = new Date()): Promise<CoachCon
   const endISO = toISODate(addDays(start, 6));
   const month = monthKey(now);
 
-  const [profile, pathDone, examMode, allWorkouts, dayLog, weekDays, workouts, sessions, template, classes, orders, money, moneyCheck, review, lastReview, study, expensesWeek] =
+  const [profile, pathDone, examMode, allWorkouts, weekShift, dayLog, weekDays, workouts, sessions, template, classes, orders, money, moneyCheck, review, lastReview, study, expensesWeek] =
     await Promise.all([
       getSetting('profile'),
       getSetting('hustlePathDone'),
       getSetting('examMode'),
       db.workouts.toArray(),
+      db.shifts.get(toISODate(weekStart(now))),
       db.days.get(date),
       db.days.where('date').between(startISO, endISO, true, true).toArray(),
       db.workouts.where('date').between(startISO, endISO, true, true).toArray(),
@@ -102,5 +104,19 @@ export async function loadCoachContext(now: Date = new Date()): Promise<CoachCon
         }
       : null,
     review: { done: !!review, weekGoals: lastReview?.nextGoals ?? null },
+    shift:
+      weekShift?.status === 'accepted'
+        ? {
+            kind: weekShift.kind,
+            target: weekShift.target,
+            weekday: weekShift.weekday,
+            hustlePeakDone: sessions.some((s) => {
+              const d = new Date(s.start);
+              const m = d.getHours() * 60 + d.getMinutes();
+              const [from, to] = PEAK_WINDOWS[profile.energyPeak];
+              return m >= from && m < to;
+            }),
+          }
+        : null,
   };
 }

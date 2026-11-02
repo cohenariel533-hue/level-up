@@ -245,6 +245,36 @@ export interface DayMoves {
   moves: StoredMove[];
 }
 
+// ---------- Rhythm: your real day (2.0, stage E) ----------
+
+/**
+ * When you first and last used Level Up on a day. A rough stand-in for
+ * waking up and going to bed. The "day" runs 04:00 → 04:00, so using the
+ * app at 01:00 counts as the night before.
+ */
+export interface ActivityDay {
+  date: string;
+  firstAt: string;
+  lastAt: string;
+}
+
+export type ShiftKind = 'wake' | 'bed' | 'gymTime' | 'hustlePeak' | 'weakDay';
+
+/** One week's "1% shift": suggested, then accepted or skipped. */
+export interface WeeklyShift {
+  /** ISO date of the week's Sunday. */
+  weekStart: string;
+  kind: ShiftKind;
+  /** "HH:mm" for time shifts. */
+  target?: string;
+  /** Where you were when it was suggested ("HH:mm"), to show "from → to". */
+  from?: string;
+  /** 0–6 for the weak-day shift. */
+  weekday?: number;
+  status: 'offered' | 'accepted' | 'skipped';
+  decidedAt?: string;
+}
+
 export class LevelUpDB extends Dexie {
   settings!: Table<SettingRow, string>;
   incomes!: Table<Income, number>;
@@ -262,6 +292,8 @@ export class LevelUpDB extends Dexie {
   reviews!: Table<WeeklyReview, string>;
   studyFeed!: Table<StudyFeedRow, string>;
   moves!: Table<DayMoves, string>;
+  activity!: Table<ActivityDay, string>;
+  shifts!: Table<WeeklyShift, string>;
 
   constructor(name = 'level-up') {
     super(name);
@@ -328,6 +360,12 @@ export class LevelUpDB extends Dexie {
     // v9 — 2.0 stage B: the coach's daily moves
     this.version(9).stores({
       moves: 'date',
+    });
+
+    // v10 — 2.0 stage E: daily activity (rhythm) and weekly 1% shifts
+    this.version(10).stores({
+      activity: 'date',
+      shifts: 'weekStart',
     });
   }
 }

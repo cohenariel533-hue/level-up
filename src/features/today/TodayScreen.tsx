@@ -6,6 +6,7 @@ import { formatLongDate, greetingFor, todayISO, toISODate, weekStart } from '../
 import { studyMinutesInWeek } from '../../lib/studyFeed';
 import { FocusCard } from './FocusCard';
 import { MovesCard } from './MovesCard';
+import { TodayShift } from './TodayShift';
 import { ReviewCard } from './ReviewCard';
 import { RingsCard } from './RingsCard';
 import { ComingUpCard, ExamModeSuggestion, StudyPlanCard } from './StudyCards';
@@ -32,6 +33,7 @@ export default function TodayScreen() {
       <div className="stack">
         <FocusCard date={date} />
         <MovesCard />
+        <TodayShift />
         {study && rings && <ExamModeSuggestion cached={study} examMode={rings.examMode} />}
         <ReviewCard />
         {rings && <RingsCard rings={rings} study={studyRing} />}
