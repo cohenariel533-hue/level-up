@@ -23,6 +23,13 @@ export interface AppSettings {
 
   /** Set once the default weekly template has been added (stage 3). */
   templateSeeded: boolean;
+
+  /** Study Planner's feed address, e.g. https://my-mac.tail1234.ts.net/api/levelup/feed (2.0). */
+  studyPlannerUrl: string;
+  /** The key made on Study Planner's iPhone page. Never included in backups (see backup.ts). */
+  studyPlannerKey: string;
+  /** Weekly study goal in hours, for the Study ring (2.0). */
+  studyGoalHours: number;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -34,6 +41,9 @@ export const DEFAULT_SETTINGS: AppSettings = {
   hustleSplit: DEFAULT_HUSTLE_SPLIT,
   categoryKinds: {},
   templateSeeded: false,
+  studyPlannerUrl: '',
+  studyPlannerKey: '',
+  studyGoalHours: 15,
 };
 
 export async function getSetting<K extends keyof AppSettings>(key: K): Promise<AppSettings[K]> {

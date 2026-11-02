@@ -7,8 +7,14 @@ import { formatDuration, formatHours } from '../../lib/time';
 import s from '../week/week.module.css';
 import type { WeekRings } from './useWeekProgress';
 
-/** The three weekly rings, plus the exam-mode switch that lowers the targets. */
-export function RingsCard({ rings }: { rings: WeekRings }) {
+/** Study hours this week from Study Planner, when it's connected. */
+export interface StudyRing {
+  minutes: number;
+  goalHours: number;
+}
+
+/** The weekly rings (Study joins when Study Planner is connected), plus the exam-mode switch. */
+export function RingsCard({ rings, study }: { rings: WeekRings; study?: StudyRing | null }) {
   const { progress, targets, examMode, moneyCheckDone } = rings;
   const hustleHours = progress.hustleMinutes / 60;
   const gymMinimumMet = progress.gym >= targets.gymMinimum && progress.gym < targets.gym;
@@ -16,6 +22,15 @@ export function RingsCard({ rings }: { rings: WeekRings }) {
   return (
     <GlassCard title={t.today.weekTitle}>
       <div className="rings">
+        {study && (
+          <ProgressRing
+            value={study.minutes / 60}
+            max={study.goalHours}
+            label={t.study.ring}
+            color="var(--c-school)"
+            display={`${formatHours(study.minutes / 60)}/${study.goalHours}`}
+          />
+        )}
         <ProgressRing value={progress.gym} max={targets.gym} label={t.today.rings.gym} color="var(--c-gym)" />
         <ProgressRing
           value={hustleHours}

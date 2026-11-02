@@ -205,6 +205,17 @@ export interface WeeklyReview {
   nextGoals: Record<ReviewPillar, string>;
 }
 
+// ---------- Study Planner link (2.0, stage A) ----------
+
+/** The last feed fetched from Study Planner, kept so Level Up works offline. */
+export interface StudyFeedRow {
+  /** Always "latest": there's only one. */
+  key: string;
+  fetchedAt: string;
+  /** The feed as Study Planner sent it (validated in lib/studyFeed.ts). */
+  feed: unknown;
+}
+
 export class LevelUpDB extends Dexie {
   settings!: Table<SettingRow, string>;
   incomes!: Table<Income, number>;
@@ -220,6 +231,7 @@ export class LevelUpDB extends Dexie {
   hustleSessions!: Table<HustleSession, number>;
   workouts!: Table<Workout, number>;
   reviews!: Table<WeeklyReview, string>;
+  studyFeed!: Table<StudyFeedRow, string>;
 
   constructor(name = 'level-up') {
     super(name);
@@ -276,6 +288,11 @@ export class LevelUpDB extends Dexie {
     // v7 — Stage 7: weekly reviews
     this.version(7).stores({
       reviews: 'weekStart',
+    });
+
+    // v8 — 2.0 stage A: the latest Study Planner feed (offline copy)
+    this.version(8).stores({
+      studyFeed: 'key',
     });
   }
 }

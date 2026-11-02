@@ -456,6 +456,55 @@ export const en = {
     weekGoalsTitle: 'This week’s goals',
   },
 
+  study: {
+    // Settings → Study Planner
+    settingsTitle: 'Study Planner',
+    settingsIntro:
+      'Connect Level Up to Study Planner on your Mac to see exams, study hours and today’s study plan. Read-only: Level Up can’t change anything there.',
+    // The setup path names Study Planner's (Hebrew) menus; each name is shown in its own <bdi>.
+    howToStart: 'On the Mac, in Study Planner:',
+    howToPath: ['Settings', 'האפליקציה באייפון', 'חיבור ל-Level Up'],
+    howToEnd: 'Create a key, then copy the address and key here.',
+    url: 'Feed address',
+    urlPlaceholder: 'https://your-mac.tailXXXX.ts.net/api/levelup/feed',
+    key: 'Key',
+    keyPlaceholder: 'Paste the key',
+    keySaved: 'Saved on this device',
+    goal: 'Weekly study goal (hours)',
+    connect: 'Save and connect',
+    syncNow: 'Sync now',
+    disconnect: 'Disconnect',
+    connected: 'Connected',
+    lastSync: (ago: string) => `Updated ${ago}`,
+    neverSynced: 'Not connected yet',
+    errors: {
+      'not-set-up': 'Add the address and key first.',
+      unreachable: 'Can’t reach your Mac. Is it awake, with Tailscale on (on the Mac and the iPhone)?',
+      'wrong-key': 'The key doesn’t match. Create a new one in Study Planner and paste it again.',
+      'not-https': 'Use the https address (Tailscale’s secure address). iPhones block plain http here.',
+      'bad-data': 'Study Planner sent something unexpected. Update Study Planner and try again.',
+      error: 'Something went wrong talking to Study Planner.',
+    },
+    synced: 'Study Planner synced ✓',
+
+    // Today
+    ring: 'Study',
+    examsTitle: 'Coming up',
+    examIn: (n: number) => (n === 0 ? 'Today' : n === 1 ? 'Tomorrow' : `In ${n} days`),
+    quiz: 'Quiz',
+    exam: 'Exam',
+    dueIn: (n: number) => (n === 0 ? 'due today' : n === 1 ? 'due tomorrow' : `due in ${n} days`),
+    workLeft: (left: string) => `${left} of work left`,
+    noExams: 'No exams or deadlines in the next weeks.',
+    planTitle: 'Study plan today',
+    studiedToday: (time: string) => `${time} studied today`,
+    nowWorking: (title: string) => `Working now: ${title}`,
+    stale: (ago: string) => `From Study Planner · ${ago}`,
+    examModeSuggest: (course: string, days: number) =>
+      `${course || 'Exam'} in ${days === 0 ? 'today' : days === 1 ? '1 day' : `${days} days`}. Switch on exam mode?`,
+    examModeOn: 'Turn on exam mode',
+  },
+
   backup: {
     errNotJson: 'This isn’t a JSON file.',
     errNotBackup: 'This file isn’t a Level Up backup.',

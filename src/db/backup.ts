@@ -30,12 +30,20 @@ export type ParseResult =
   | { ok: true; backup: Backup; recordCount: number }
   | { ok: false; error: string };
 
+/** Settings that stay on this device: never written to a backup file, never replaced by one. */
+const DEVICE_ONLY_SETTINGS = new Set(['studyPlannerKey']);
+/** Tables that are only a cache of data living elsewhere (Study Planner), left out of backups. */
+const CACHE_TABLES = new Set(['studyFeed']);
+
 /** Reads every table into one backup object. */
 export async function createBackup(): Promise<Backup> {
   const tables: Backup['tables'] = {};
   await db.transaction('r', db.tables, async () => {
     for (const table of db.tables) {
-      tables[table.name] = await table.toArray();
+      if (CACHE_TABLES.has(table.name)) continue;
+      const rows = await table.toArray();
+      tables[table.name] =
+        table.name === 'settings' ? rows.filter((r) => !DEVICE_ONLY_SETTINGS.has((r as { key: string }).key)) : rows;
     }
   });
   return {
@@ -79,11 +87,17 @@ export function parseBackup(text: string): ParseResult {
  */
 export async function restoreBackup(backup: Backup): Promise<void> {
   await db.transaction('rw', db.tables, async () => {
+    // Keep this device's own settings (like the Study Planner key) and caches.
+    const keep = await db.settings.where('key').anyOf([...DEVICE_ONLY_SETTINGS]).toArray();
     for (const table of db.tables) {
+      if (CACHE_TABLES.has(table.name)) continue;
       await table.clear();
-      const rows = backup.tables[table.name];
+      const rows = backup.tables[table.name]?.filter(
+        (r) => table.name !== 'settings' || !DEVICE_ONLY_SETTINGS.has(r.key as string),
+      );
       if (rows?.length) await table.bulkAdd(rows);
     }
+    if (keep.length) await db.settings.bulkPut(keep);
   });
 }
 

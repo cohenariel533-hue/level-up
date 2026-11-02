@@ -6,6 +6,7 @@ import { initDatabase } from '../../db/seed';
 import { setSetting, useSetting, type ThemePref } from '../../db/settings';
 import { t } from '../../i18n/en';
 import { daysSince, formatShortDate } from '../../lib/dates';
+import { StudyPlannerCard } from './StudyPlannerCard';
 
 const APP_VERSION = '1.0.0';
 
@@ -79,6 +80,8 @@ export default function SettingsScreen() {
             ]}
           />
         </GlassCard>
+
+        <StudyPlannerCard />
 
         <GlassCard title={t.settings.backupTitle}>
           <div className="stack" style={{ '--gap': '14px' } as CSSProperties}>

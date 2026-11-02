@@ -242,7 +242,9 @@
 /* ---------- Progress rings ---------- */
 .rings {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* as many equal columns as there are rings (3, or 4 with Study) */
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   gap: 8px;
 }
 .ring {

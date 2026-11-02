@@ -10,10 +10,12 @@ import ReviewScreen from './features/review/ReviewScreen';
 import SettingsScreen from './features/settings/SettingsScreen';
 import TodayScreen from './features/today/TodayScreen';
 import WeekScreen from './features/week/WeekScreen';
+import { useStudySync } from './hooks/useStudySync';
 import { useThemeSync } from './hooks/useThemeSync';
 
 export default function App() {
   useThemeSync();
+  useStudySync();
 
   return (
     <ToastProvider>
