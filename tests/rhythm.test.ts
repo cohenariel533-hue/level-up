@@ -142,6 +142,7 @@ describe('coach moves for an accepted shift', () => {
     review: { done: false, weekGoals: null },
     shift: null,
     brainTasks: [],
+    backup: { daysSince: 1, installedDaysAgo: 30 },
     ...over,
   });
 

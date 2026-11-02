@@ -32,6 +32,7 @@ function context(over: Partial<CoachContext> = {}): CoachContext {
     review: { done: false, weekGoals: null },
     shift: null,
     brainTasks: [],
+    backup: { daysSince: 1, installedDaysAgo: 30 },
     ...over,
   };
 }
@@ -102,6 +103,13 @@ describe('rules', () => {
   it('nudges Saturday’s money check and review', () => {
     const saturday = context({ now: new Date(2026, 10, 7, 11, 0) });
     expect(ids(proposeMoves(saturday))).toEqual(expect.arrayContaining(['money-check:2026-11-01', 'weekly-review:2026-11-01']));
+  });
+
+  it('reminds you to back up after the first week, then every two weeks', () => {
+    expect(ids(proposeMoves(context({ backup: { daysSince: null, installedDaysAgo: 3 } })))).not.toContain('backup');
+    expect(ids(proposeMoves(context({ backup: { daysSince: null, installedDaysAgo: 8 } })))).toContain('backup');
+    expect(ids(proposeMoves(context({ backup: { daysSince: 5, installedDaysAgo: 60 } })))).not.toContain('backup');
+    expect(ids(proposeMoves(context({ backup: { daysSince: 15, installedDaysAgo: 60 } })))).toContain('backup');
   });
 
   it('offers to connect Study Planner when it isn’t', () => {

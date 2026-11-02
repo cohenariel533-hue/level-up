@@ -31,7 +31,7 @@ export function Shell({ children }: { children: ReactNode }) {
           <img src={`${import.meta.env.BASE_URL}icons/favicon.svg`} alt="" width={30} height={30} />
           <span>{t.appName}</span>
         </div>
-        <nav className={s.sideNav} aria-label="Main">
+        <nav className={s.sideNav} aria-label={t.nav.main}>
           {SIDEBAR_ITEMS.map((item) => (
             <NavItemLink key={item.path} item={item} className={s.sideItem} activeClass={s.sideItemActive} />
           ))}
@@ -45,7 +45,7 @@ export function Shell({ children }: { children: ReactNode }) {
         </div>
       </main>
 
-      <nav className={`glass ${s.tabbar}`} aria-label="Main">
+      <nav className={`glass ${s.tabbar}`} aria-label={t.nav.main}>
         {TAB_ITEMS.map((item) => (
           <NavItemLink
             key={item.path}

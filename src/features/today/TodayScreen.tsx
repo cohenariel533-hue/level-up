@@ -1,6 +1,8 @@
-import { PageHeader } from '../../components/ui';
+import { useCallback, useState } from 'react';
+import { Fab, PageHeader } from '../../components/ui';
 import { useSetting } from '../../db/settings';
 import { useStudyFeed } from '../../db/studyFeed';
+import { ExpenseSheet } from '../money/components/ExpenseSheet';
 import { t } from '../../i18n/en';
 import { formatLongDate, greetingFor, todayISO, toISODate, weekStart } from '../../lib/dates';
 import { studyMinutesInWeek } from '../../lib/studyFeed';
@@ -24,6 +26,9 @@ export default function TodayScreen() {
   const rings = useWeekProgress();
   const study = useStudyFeed();
   const goalHours = useSetting('studyGoalHours') ?? 15;
+  const kinds = useSetting('categoryKinds') ?? {};
+  const [expenseOpen, setExpenseOpen] = useState(false);
+  const closeExpense = useCallback(() => setExpenseOpen(false), []);
 
   const studyRing = study ? { minutes: studyMinutesInWeek(study.feed, toISODate(weekStart(now))), goalHours } : null;
 
@@ -43,6 +48,10 @@ export default function TodayScreen() {
         <TodayBlocks date={date} weekday={now.getDay()} />
         {study && <ComingUpCard cached={study} />}
       </div>
+
+      {/* The most common thing to log, two taps from the home screen: + → category. */}
+      <Fab label={t.money.addExpense} onClick={() => setExpenseOpen(true)} />
+      <ExpenseSheet open={expenseOpen} onClose={closeExpense} kinds={kinds} />
     </>
   );
 }

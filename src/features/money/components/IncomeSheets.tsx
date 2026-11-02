@@ -110,7 +110,7 @@ export function HustleSheet({
                   {p.note ? ` · ${p.note}` : ''}
                 </span>
               </span>
-              <button type="button" className={s.removeButton} aria-label="Remove" onClick={() => deleteIncome(p.id!)}>
+              <button type="button" className={s.removeButton} aria-label={t.money.removePayment} onClick={() => deleteIncome(p.id!)}>
                 <X aria-hidden="true" />
               </button>
             </div>

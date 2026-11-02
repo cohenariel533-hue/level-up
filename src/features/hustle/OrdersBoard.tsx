@@ -64,7 +64,7 @@ function OrderCard({ order, onOpen, onAdvance }: { order: Order; onOpen: () => v
       <div className={s.cardMeta}>
         <span>{t.hustle.occasions[order.occasion]}</span>
         <span>· {order.paid ? t.hustle.paidBadge : t.hustle.unpaid}</span>
-        {order.rush && <span>· Rush</span>}
+        {order.rush && <span>· {t.hustle.rushShort}</span>}
       </div>
       {showDeadline && (
         <div className={`${s.cardMeta} ${days < 0 ? s.overdue : ''}`}>

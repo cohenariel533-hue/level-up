@@ -6,7 +6,7 @@ import { loadPlan } from '../../db/brain';
 import { loadStudyFeed } from '../../db/studyFeed';
 import { brainMoveId, weekDates } from '../../lib/brain';
 import type { CoachContext } from '../../lib/coach';
-import { monthKey, toISODate, weekStart } from '../../lib/dates';
+import { daysSince, monthKey, toISODate, weekStart } from '../../lib/dates';
 import { gymSessionsByDate } from '../../lib/gym';
 import { minutesByDate } from '../../lib/hustle';
 import { pathFacts, pathStatus } from '../../lib/hustlePath';
@@ -28,8 +28,10 @@ export async function loadCoachContext(now: Date = new Date()): Promise<CoachCon
   const endISO = toISODate(addDays(start, 6));
   const month = monthKey(now);
 
-  const [profile, pathDone, examMode, allWorkouts, weekShift, brainPlan, weekMoves, dayLog, weekDays, workouts, sessions, template, classes, orders, money, moneyCheck, review, lastReview, study, expensesWeek] =
+  const [lastBackupAt, installedAt, profile, pathDone, examMode, allWorkouts, weekShift, brainPlan, weekMoves, dayLog, weekDays, workouts, sessions, template, classes, orders, money, moneyCheck, review, lastReview, study, expensesWeek] =
     await Promise.all([
+      getSetting('lastBackupAt'),
+      getSetting('installedAt'),
       getSetting('profile'),
       getSetting('hustlePathDone'),
       getSetting('examMode'),
@@ -108,6 +110,10 @@ export async function loadCoachContext(now: Date = new Date()): Promise<CoachCon
         }
       : null,
     review: { done: !!review, weekGoals: lastReview?.nextGoals ?? null },
+    backup: {
+      daysSince: lastBackupAt ? daysSince(lastBackupAt, now) : null,
+      installedDaysAgo: installedAt ? daysSince(installedAt, now) : 0,
+    },
     // Claude's tasks this week, minus the ones already ticked on any day
     brainTasks: brainPlan
       ? brainPlan.plan.tasks

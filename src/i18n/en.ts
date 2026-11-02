@@ -6,6 +6,7 @@ export const en = {
   appName: 'Level Up',
 
   nav: {
+    main: 'Main',
     today: 'Today',
     week: 'Week',
     money: 'Money',
@@ -177,6 +178,7 @@ export const en = {
     addPayment: 'Add payment',
     hustleNotePlaceholder: 'e.g. Anniversary site for Noa',
     noPayments: 'No payments yet this month.',
+    removePayment: 'Remove payment',
 
     expense: {
       newTitle: 'New expense',
@@ -314,6 +316,7 @@ export const en = {
     },
     packages: { basic: 'Basic ₪149', premium: 'Premium ₪299', business: 'Business custom' },
     rush: 'Rush (+₪80)',
+    rushShort: 'Rush',
     client: 'Client name',
     clientPlaceholder: 'e.g. Noa',
     occasion: 'Occasion',
@@ -599,6 +602,8 @@ export const en = {
       weekGoalDetail: 'One step toward the goal you set in last week’s review.',
       bedtime: (time: string) => `Wind down by ${time}`,
       bedtimeDetail: 'Phone away, lights low. Tomorrow-you says thanks.',
+      backup: 'Back up your data (1 min)',
+      backupDetail: 'Everything lives only on this phone. Settings → Export backup → save to Files.',
       aboutMe: 'Tell Level Up about you (2 min)',
       aboutMeDetail: 'So your moves fit your real day.',
     },

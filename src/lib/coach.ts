@@ -85,6 +85,8 @@ export interface CoachContext {
   };
   study: Pick<StudyFeed, 'exams' | 'deadlines'> & { studiedTodayMin: number; plannedTodayMin: number } | null;
   review: { done: boolean; weekGoals: Record<ReviewPillar, string> | null };
+  /** Days since the last backup export (null = never), and since the app was first opened. */
+  backup: { daysSince: number | null; installedDaysAgo: number };
   /** Tasks from Claude's plan for this week (lib/brain.ts) that aren't done yet, in plan order. */
   brainTasks: { id: string; pillar: MovePillar; title: string; minutes: number; why: string }[];
   /** This week's accepted 1% shift (lib/rhythm.ts), and whether its hustle session already happened. */
@@ -128,6 +130,11 @@ function lifeMoves(ctx: CoachContext): Move[] {
   const hour = ctx.now.getHours();
   if (!ctx.profile.completedAt) {
     moves.push({ id: 'about-me', pillar: 'life', title: t.coach.m.aboutMe, detail: t.coach.m.aboutMeDetail, minutes: 2, to: '/me', auto: true, priority: 70 });
+  }
+  // Everything lives only on this phone: a gentle backup reminder after the first week, then every 2 weeks.
+  const { daysSince, installedDaysAgo } = ctx.backup;
+  if ((daysSince === null && installedDaysAgo >= 7) || (daysSince !== null && daysSince >= 14)) {
+    moves.push({ id: 'backup', pillar: 'life', title: t.coach.m.backup, detail: t.coach.m.backupDetail, minutes: 1, to: '/settings', auto: true, priority: 40 });
   }
   if (!ctx.focusSet && hour < 14) {
     moves.push({ id: 'focus', pillar: 'life', title: t.coach.m.setFocus, detail: t.coach.m.setFocusDetail, minutes: 1, auto: true, priority: 60 });

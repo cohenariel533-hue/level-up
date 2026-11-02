@@ -8,7 +8,7 @@ import { t } from '../../i18n/en';
 import { daysSince, formatShortDate } from '../../lib/dates';
 import { StudyPlannerCard } from './StudyPlannerCard';
 
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '2.0.0';
 
 export default function SettingsScreen() {
   const theme = useSetting('theme');
