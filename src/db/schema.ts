@@ -275,6 +275,16 @@ export interface WeeklyShift {
   decidedAt?: string;
 }
 
+// ---------- Claude's weekly plan (2.0, stage F) ----------
+
+/** A weekly plan Claude wrote (shape checked in lib/brain.ts). */
+export interface BrainPlanRow {
+  /** ISO date of the planned week's Sunday. */
+  weekStart: string;
+  createdAt: string;
+  plan: unknown;
+}
+
 export class LevelUpDB extends Dexie {
   settings!: Table<SettingRow, string>;
   incomes!: Table<Income, number>;
@@ -294,6 +304,7 @@ export class LevelUpDB extends Dexie {
   moves!: Table<DayMoves, string>;
   activity!: Table<ActivityDay, string>;
   shifts!: Table<WeeklyShift, string>;
+  brainPlans!: Table<BrainPlanRow, string>;
 
   constructor(name = 'level-up') {
     super(name);
@@ -366,6 +377,11 @@ export class LevelUpDB extends Dexie {
     this.version(10).stores({
       activity: 'date',
       shifts: 'weekStart',
+    });
+
+    // v11 — 2.0 stage F: Claude's weekly plans
+    this.version(11).stores({
+      brainPlans: 'weekStart',
     });
   }
 }

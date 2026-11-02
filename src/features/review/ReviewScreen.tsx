@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, GlassCard, ListRow, PageHeader, StepCard, useToast } from '../../components/ui';
 import { saveReview } from '../../db/review';
+import { getSetting } from '../../db/settings';
 import { db, type ReviewPillar, type WeeklyReview } from '../../db/schema';
 import { t } from '../../i18n/en';
 import { formatShortDate, toISODate, weekStart } from '../../lib/dates';
@@ -130,7 +131,7 @@ function ReviewForm({ week, isThisWeek }: { week: string; isThisWeek: boolean })
     };
     await saveReview(review);
     toast(t.review.saved);
-    navigate('/');
+    navigate((await getSetting('studyPlannerKey')) ? '/plan' : '/');
   }
 
   return (

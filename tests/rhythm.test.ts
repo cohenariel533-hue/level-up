@@ -141,6 +141,7 @@ describe('coach moves for an accepted shift', () => {
     study: { exams: [], deadlines: [], studiedTodayMin: 0, plannedTodayMin: 0 },
     review: { done: false, weekGoals: null },
     shift: null,
+    brainTasks: [],
     ...over,
   });
 

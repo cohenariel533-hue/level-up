@@ -97,6 +97,9 @@ a {
 @keyframes fade-in {
   from { opacity: 0; }
 }
+@keyframes soft-pulse {
+  50% { opacity: 0.35; transform: scale(0.92); }
+}
 
 /* ---------- Layout helpers ---------- */
 .stack {

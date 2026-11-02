@@ -4,6 +4,7 @@ import { useStudyFeed } from '../../db/studyFeed';
 import { t } from '../../i18n/en';
 import { formatLongDate, greetingFor, todayISO, toISODate, weekStart } from '../../lib/dates';
 import { studyMinutesInWeek } from '../../lib/studyFeed';
+import { BrainCard } from './BrainCard';
 import { FocusCard } from './FocusCard';
 import { MovesCard } from './MovesCard';
 import { TodayShift } from './TodayShift';
@@ -34,6 +35,7 @@ export default function TodayScreen() {
         <FocusCard date={date} />
         <MovesCard />
         <TodayShift />
+        <BrainCard />
         {study && rings && <ExamModeSuggestion cached={study} examMode={rings.examMode} />}
         <ReviewCard />
         {rings && <RingsCard rings={rings} study={studyRing} />}

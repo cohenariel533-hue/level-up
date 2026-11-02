@@ -4,6 +4,7 @@ import { ToastProvider } from './components/ui';
 import MoneyCheckScreen from './features/money/MoneyCheckScreen';
 import MoneyScreen from './features/money/MoneyScreen';
 import MoreScreen from './features/more/MoreScreen';
+import BrainScreen from './features/brain/BrainScreen';
 import GymScreen from './features/gym/GymScreen';
 import HustleScreen from './features/hustle/HustleScreen';
 import ProfileScreen from './features/profile/ProfileScreen';
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/review" element={<ReviewScreen />} />
           <Route path="/review/:week" element={<ReviewScreen />} />
           <Route path="/more" element={<MoreScreen />} />
+          <Route path="/plan" element={<BrainScreen />} />
           <Route path="/rhythm" element={<RhythmScreen />} />
           <Route path="/me" element={<ProfileScreen />} />
           <Route path="/settings" element={<SettingsScreen />} />

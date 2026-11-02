@@ -31,6 +31,7 @@ function context(over: Partial<CoachContext> = {}): CoachContext {
     study: { exams: [], deadlines: [], studiedTodayMin: 0, plannedTodayMin: 0 },
     review: { done: false, weekGoals: null },
     shift: null,
+    brainTasks: [],
     ...over,
   };
 }

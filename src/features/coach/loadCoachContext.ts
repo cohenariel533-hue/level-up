@@ -2,7 +2,9 @@ import { addDays } from 'date-fns';
 import { db } from '../../db/schema';
 import { getSetting } from '../../db/settings';
 import { t } from '../../i18n/en';
+import { loadPlan } from '../../db/brain';
 import { loadStudyFeed } from '../../db/studyFeed';
+import { brainMoveId, weekDates } from '../../lib/brain';
 import type { CoachContext } from '../../lib/coach';
 import { monthKey, toISODate, weekStart } from '../../lib/dates';
 import { gymSessionsByDate } from '../../lib/gym';
@@ -26,13 +28,15 @@ export async function loadCoachContext(now: Date = new Date()): Promise<CoachCon
   const endISO = toISODate(addDays(start, 6));
   const month = monthKey(now);
 
-  const [profile, pathDone, examMode, allWorkouts, weekShift, dayLog, weekDays, workouts, sessions, template, classes, orders, money, moneyCheck, review, lastReview, study, expensesWeek] =
+  const [profile, pathDone, examMode, allWorkouts, weekShift, brainPlan, weekMoves, dayLog, weekDays, workouts, sessions, template, classes, orders, money, moneyCheck, review, lastReview, study, expensesWeek] =
     await Promise.all([
       getSetting('profile'),
       getSetting('hustlePathDone'),
       getSetting('examMode'),
       db.workouts.toArray(),
       db.shifts.get(toISODate(weekStart(now))),
+      loadPlan(toISODate(weekStart(now))),
+      db.moves.where('date').anyOf(weekDates(toISODate(weekStart(now)))).toArray(),
       db.days.get(date),
       db.days.where('date').between(startISO, endISO, true, true).toArray(),
       db.workouts.where('date').between(startISO, endISO, true, true).toArray(),
@@ -104,6 +108,12 @@ export async function loadCoachContext(now: Date = new Date()): Promise<CoachCon
         }
       : null,
     review: { done: !!review, weekGoals: lastReview?.nextGoals ?? null },
+    // Claude's tasks this week, minus the ones already ticked on any day
+    brainTasks: brainPlan
+      ? brainPlan.plan.tasks
+          .map((task, i) => ({ ...task, id: brainMoveId(brainPlan.weekStart, i) }))
+          .filter((task) => !weekMoves.some((d) => d.moves.some((m) => m.id === task.id && m.status === 'done')))
+      : [],
     shift:
       weekShift?.status === 'accepted'
         ? {

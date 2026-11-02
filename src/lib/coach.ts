@@ -85,6 +85,8 @@ export interface CoachContext {
   };
   study: Pick<StudyFeed, 'exams' | 'deadlines'> & { studiedTodayMin: number; plannedTodayMin: number } | null;
   review: { done: boolean; weekGoals: Record<ReviewPillar, string> | null };
+  /** Tasks from Claude's plan for this week (lib/brain.ts) that aren't done yet, in plan order. */
+  brainTasks: { id: string; pillar: MovePillar; title: string; minutes: number; why: string }[];
   /** This week's accepted 1% shift (lib/rhythm.ts), and whether its hustle session already happened. */
   shift: { kind: ShiftKind; target?: string; weekday?: number; hustlePeakDone: boolean } | null;
 }
@@ -104,7 +106,21 @@ export function proposeMoves(ctx: CoachContext): Move[] {
     ...moneyMoves(ctx),
     ...reviewMoves(ctx),
     ...shiftMoves(ctx),
+    ...brainMoves(ctx),
   ];
+}
+
+/** The next two not-yet-done tasks from Claude's weekly plan. */
+function brainMoves(ctx: CoachContext): Move[] {
+  return ctx.brainTasks.slice(0, 2).map((task, i) => ({
+    id: task.id,
+    pillar: task.pillar,
+    title: task.title,
+    detail: task.why,
+    minutes: task.minutes,
+    to: '/plan',
+    priority: 54 - i * 4,
+  }));
 }
 
 function lifeMoves(ctx: CoachContext): Move[] {
