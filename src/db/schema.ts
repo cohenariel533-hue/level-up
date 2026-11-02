@@ -216,6 +216,33 @@ export interface StudyFeedRow {
   feed: unknown;
 }
 
+// ---------- Coach: today's moves (2.0, stage B) ----------
+
+export type MoveStatus = 'open' | 'done' | 'skipped';
+
+/** One of today's moves, as picked in the morning (a snapshot: the wording doesn't change during the day). */
+export interface StoredMove {
+  /** "kind:subject", e.g. "exam-study:task-2". The kind is what the coach learns from. */
+  id: string;
+  pillar: string;
+  title: string;
+  detail?: string;
+  minutes: number;
+  /** Screen it relates to, e.g. "/money". */
+  to?: string;
+  /** Ticks itself once its condition is met (e.g. "add this month's allowance"). */
+  auto?: boolean;
+  /** Left open yesterday and still worth doing. */
+  carried?: boolean;
+  status: MoveStatus;
+}
+
+export interface DayMoves {
+  date: string;
+  generatedAt: string;
+  moves: StoredMove[];
+}
+
 export class LevelUpDB extends Dexie {
   settings!: Table<SettingRow, string>;
   incomes!: Table<Income, number>;
@@ -232,6 +259,7 @@ export class LevelUpDB extends Dexie {
   workouts!: Table<Workout, number>;
   reviews!: Table<WeeklyReview, string>;
   studyFeed!: Table<StudyFeedRow, string>;
+  moves!: Table<DayMoves, string>;
 
   constructor(name = 'level-up') {
     super(name);
@@ -293,6 +321,11 @@ export class LevelUpDB extends Dexie {
     // v8 — 2.0 stage A: the latest Study Planner feed (offline copy)
     this.version(8).stores({
       studyFeed: 'key',
+    });
+
+    // v9 — 2.0 stage B: the coach's daily moves
+    this.version(9).stores({
+      moves: 'date',
     });
   }
 }

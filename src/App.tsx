@@ -6,6 +6,7 @@ import MoneyScreen from './features/money/MoneyScreen';
 import MoreScreen from './features/more/MoreScreen';
 import GymScreen from './features/gym/GymScreen';
 import HustleScreen from './features/hustle/HustleScreen';
+import ProfileScreen from './features/profile/ProfileScreen';
 import ReviewScreen from './features/review/ReviewScreen';
 import SettingsScreen from './features/settings/SettingsScreen';
 import TodayScreen from './features/today/TodayScreen';
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/review" element={<ReviewScreen />} />
           <Route path="/review/:week" element={<ReviewScreen />} />
           <Route path="/more" element={<MoreScreen />} />
+          <Route path="/me" element={<ProfileScreen />} />
           <Route path="/settings" element={<SettingsScreen />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

@@ -1,0 +1,59 @@
+/* Today screen: the coach's moves. Block rows reuse week.module.css. */
+
+/* The tappable text of a move (goes to the related screen) */
+.moveText {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.moveText:disabled {
+  cursor: default;
+}
+
+.swap {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: background var(--dur), color var(--dur), transform 300ms var(--ease);
+}
+.swap:active {
+  transform: rotate(120deg);
+}
+.swap svg {
+  width: 16px;
+  height: 16px;
+}
+@media (hover: hover) {
+  .swap:hover {
+    background: var(--track);
+    color: var(--text-2);
+  }
+}
+
+.streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--c-gym) 16%, transparent);
+  color: var(--c-gym);
+  font-size: 13px;
+  font-weight: 700;
+}
+.streak svg {
+  width: 14px;
+  height: 14px;
+}

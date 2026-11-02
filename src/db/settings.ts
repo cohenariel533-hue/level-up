@@ -1,5 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { DEFAULT_BUDGET_SPLIT, DEFAULT_HUSTLE_SPLIT, type BudgetSplit, type HustleSplit } from '../lib/money';
+import { DEFAULT_PROFILE, type Profile } from '../lib/profile';
 import { db } from './schema';
 
 export type ThemePref = 'dark' | 'light' | 'system';
@@ -30,6 +31,9 @@ export interface AppSettings {
   studyPlannerKey: string;
   /** Weekly study goal in hours, for the Study ring (2.0). */
   studyGoalHours: number;
+
+  /** About me (2.0 stage B). */
+  profile: Profile;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -44,6 +48,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   studyPlannerUrl: '',
   studyPlannerKey: '',
   studyGoalHours: 15,
+  profile: DEFAULT_PROFILE,
 };
 
 export async function getSetting<K extends keyof AppSettings>(key: K): Promise<AppSettings[K]> {

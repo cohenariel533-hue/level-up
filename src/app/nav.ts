@@ -5,6 +5,7 @@ import {
   NotebookPen,
   Rocket,
   Settings,
+  UserRound,
   Sun,
   Wallet,
   type LucideIcon,
@@ -32,6 +33,7 @@ export const TAB_ITEMS: NavItem[] = [
 export const MORE_ITEMS: NavItem[] = [
   { path: '/gym', label: t.nav.gym, icon: Dumbbell, color: 'var(--c-gym)' },
   { path: '/review', label: t.nav.review, icon: NotebookPen, color: 'var(--c-review)' },
+  { path: '/me', label: t.nav.me, icon: UserRound, color: 'var(--accent)' },
   { path: '/settings', label: t.nav.settings, icon: Settings, color: 'var(--c-neutral)' },
 ];
 

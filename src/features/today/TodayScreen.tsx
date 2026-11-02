@@ -5,6 +5,7 @@ import { t } from '../../i18n/en';
 import { formatLongDate, greetingFor, todayISO, toISODate, weekStart } from '../../lib/dates';
 import { studyMinutesInWeek } from '../../lib/studyFeed';
 import { FocusCard } from './FocusCard';
+import { MovesCard } from './MovesCard';
 import { ReviewCard } from './ReviewCard';
 import { RingsCard } from './RingsCard';
 import { ComingUpCard, ExamModeSuggestion, StudyPlanCard } from './StudyCards';
@@ -12,7 +13,7 @@ import { TodayBlocks } from './TodayBlocks';
 import { useWeekProgress } from './useWeekProgress';
 
 /**
- * Home: today's focus, this week's rings, today's blocks to tick off and,
+ * Home: today's focus, the coach's 3 moves, this week's rings, today's blocks and,
  * when Study Planner is connected, exams, deadlines and today's study plan.
  */
 export default function TodayScreen() {
@@ -30,6 +31,7 @@ export default function TodayScreen() {
 
       <div className="stack">
         <FocusCard date={date} />
+        <MovesCard />
         {study && rings && <ExamModeSuggestion cached={study} examMode={rings.examMode} />}
         <ReviewCard />
         {rings && <RingsCard rings={rings} study={studyRing} />}
