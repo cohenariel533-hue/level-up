@@ -26,7 +26,7 @@ function context(over: Partial<CoachContext> = {}): CoachContext {
     focusSet: true,
     examMode: false,
     gym: { done: 1, goal: 4, minimum: 3, workoutToday: false, blockToday: null },
-    hustle: { minutesThisWeek: 180, goalHours: 7, orders: [{ id: 1, client: 'Noa', status: 'building', deadline: null, createdAt: '2026-10-30T10:00:00Z' }] },
+    hustle: { minutesThisWeek: 180, goalHours: 7, orders: [{ id: 1, client: 'Noa', status: 'building', deadline: null, createdAt: '2026-10-30T10:00:00Z' }], pathStep: null },
     money: { month: '2026-11', allowanceSet: true, moneyCheckDone: false, funLeft: 300, funPlan: 500, waitReady: [], expensesToday: 1, watched: [] },
     study: { exams: [], deadlines: [], studiedTodayMin: 0, plannedTodayMin: 0 },
     review: { done: false, weekGoals: null },
@@ -73,6 +73,7 @@ describe('rules', () => {
       hustle: {
         minutesThisWeek: 600,
         goalHours: 7,
+        pathStep: null,
         orders: [
           { id: 1, client: 'Noa', status: 'building', deadline: '2026-11-04', createdAt: '2026-10-28T10:00:00Z' },
           { id: 2, client: 'Dani', status: 'lead', deadline: null, createdAt: '2026-10-30T10:00:00Z' },
@@ -83,8 +84,12 @@ describe('rules', () => {
     expect(ids(proposeMoves(ctx))).toEqual(expect.arrayContaining(['order-finish:1', 'lead-follow-up:2', 'ask-review:3']));
   });
 
-  it('gives a first step when there are no orders yet', () => {
-    expect(ids(proposeMoves(context({ hustle: { minutesThisWeek: 600, goalHours: 7, orders: [] } })))).toContain('hustle-first-step');
+  it('gives the next hustle path step, more urgent before the first order', () => {
+    const pathStep = { id: 'demoPlan', title: 'Plan your demo', why: 'Demos sell', minutes: 30 };
+    const none = proposeMoves(context({ hustle: { minutesThisWeek: 600, goalHours: 7, orders: [], pathStep } }));
+    expect(none.find((m) => m.id === 'hustle-path:demoPlan')).toMatchObject({ priority: 58, auto: true, title: 'Plan your demo' });
+    const some = proposeMoves(context({ hustle: { ...context().hustle, minutesThisWeek: 600, pathStep } }));
+    expect(some.find((m) => m.id === 'hustle-path:demoPlan')?.priority).toBe(48);
   });
 
   it('nudges Saturday’s money check and review', () => {

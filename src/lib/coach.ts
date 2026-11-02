@@ -57,7 +57,13 @@ export interface CoachContext {
   focusSet: boolean;
   examMode: boolean;
   gym: { done: number; goal: number; minimum: number; workoutToday: boolean; blockToday: string | null };
-  hustle: { minutesThisWeek: number; goalHours: number; orders: CoachOrder[] };
+  hustle: {
+    minutesThisWeek: number;
+    goalHours: number;
+    orders: CoachOrder[];
+    /** The next step on the hustle path (lib/hustlePath.ts), if any. */
+    pathStep: { id: string; title: string; why: string; minutes: number } | null;
+  };
   money: {
     month: string;
     allowanceSet: boolean;
@@ -213,9 +219,20 @@ function hustleMoves(ctx: CoachContext): Move[] {
     moves.push({ id: `lead-follow-up:${lead.id}`, pillar: 'hustle', title: t.coach.m.followUpLead(lead.client), detail: t.coach.m.followUpDetail, minutes: 5, to: '/hustle', priority: 50 });
   }
 
-  if (orders.length === 0) {
-    // Stage C replaces this with the full step-by-step path.
-    moves.push({ id: 'hustle-first-step', pillar: 'hustle', title: t.coach.m.firstStep, detail: t.coach.m.firstStepDetail, minutes: 30, to: '/hustle', priority: 50 });
+  // The next step on the hustle path. A bit more urgent before the first order,
+  // when it's the only thing moving the hustle forward. Ticks itself once done.
+  const step = ctx.hustle.pathStep;
+  if (step) {
+    moves.push({
+      id: `hustle-path:${step.id}`,
+      pillar: 'hustle',
+      title: step.title,
+      detail: step.why,
+      minutes: step.minutes,
+      to: '/hustle',
+      auto: true,
+      priority: orders.length === 0 ? 58 : 48,
+    });
   }
 
   // Behind on hours for this point in the week.

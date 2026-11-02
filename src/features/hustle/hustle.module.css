@@ -170,3 +170,51 @@
   border-color: var(--c-hustle);
   background: color-mix(in srgb, var(--c-hustle) 18%, transparent);
 }
+
+/* The hustle path */
+.pathNext {
+  margin-top: 16px;
+}
+.pathTitle {
+  margin: 4px 0 6px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.pathAll {
+  padding-top: 4px;
+}
+.pathStep {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 2px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: 15px;
+  text-align: start;
+  cursor: pointer;
+}
+.pathStep:disabled {
+  cursor: default;
+}
+.pathTick {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border: 2px solid color-mix(in srgb, var(--c-hustle) 50%, transparent);
+  border-radius: 50%;
+  color: #fff;
+}
+.pathStep[aria-pressed='true'] .pathTick {
+  border-color: var(--c-hustle);
+  background: var(--c-hustle);
+}
+.pathTick svg {
+  width: 13px;
+  height: 13px;
+}

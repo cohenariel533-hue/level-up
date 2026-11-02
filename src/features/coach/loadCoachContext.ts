@@ -7,6 +7,7 @@ import type { CoachContext } from '../../lib/coach';
 import { monthKey, toISODate, weekStart } from '../../lib/dates';
 import { gymSessionsByDate } from '../../lib/gym';
 import { minutesByDate } from '../../lib/hustle';
+import { pathFacts, pathStatus } from '../../lib/hustlePath';
 import { waitStatus } from '../../lib/money';
 import { previousWeek } from '../../lib/review';
 import { studyMinutesToday } from '../../lib/studyFeed';
@@ -23,9 +24,10 @@ export async function loadCoachContext(now: Date = new Date()): Promise<CoachCon
   const endISO = toISODate(addDays(start, 6));
   const month = monthKey(now);
 
-  const [profile, examMode, dayLog, weekDays, workouts, sessions, template, classes, orders, money, moneyCheck, review, lastReview, study, expensesWeek] =
+  const [profile, pathDone, examMode, dayLog, weekDays, workouts, sessions, template, classes, orders, money, moneyCheck, review, lastReview, study, expensesWeek] =
     await Promise.all([
       getSetting('profile'),
+      getSetting('hustlePathDone'),
       getSetting('examMode'),
       db.days.get(date),
       db.days.where('date').between(startISO, endISO, true, true).toArray(),
@@ -45,6 +47,8 @@ export async function loadCoachContext(now: Date = new Date()): Promise<CoachCon
   const targets = weeklyTargets(examMode);
   const progress = weekProgress(weekDays, minutesByDate(sessions, now), gymSessionsByDate(workouts, weekDays));
   const gymBlock = blocksForDay(now.getDay(), template, classes).find((b) => b.pillar === 'gym');
+  const step = pathStatus(pathDone, pathFacts(orders), profile.hustleStage).current;
+  const stepText = step ? t.path.steps[step.id as keyof typeof t.path.steps] : null;
 
   return {
     now,
@@ -65,6 +69,7 @@ export async function loadCoachContext(now: Date = new Date()): Promise<CoachCon
       minutesThisWeek: progress.hustleMinutes,
       goalHours: targets.hustleHours,
       orders: orders.map((o) => ({ id: o.id!, client: o.client, status: o.status, deadline: o.deadline, createdAt: o.createdAt })),
+      pathStep: step && stepText ? { id: step.id, title: stepText.title, why: stepText.why, minutes: step.minutes } : null,
     },
     money: {
       month,

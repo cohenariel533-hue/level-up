@@ -8,6 +8,7 @@
 import { t } from '../i18n/en';
 import { todayISO } from '../lib/dates';
 import { db, type Order, type OrderStatus } from './schema';
+import { getSetting, setSetting } from './settings';
 
 export type OrderInput = Omit<Order, 'id' | 'createdAt' | 'incomeId' | 'paidAt'>;
 
@@ -85,3 +86,13 @@ export function addManualSession(date: string, minutes: number, orderId?: number
 }
 
 export const deleteSession = (id: number) => db.hustleSessions.delete(id);
+
+// ---------- The hustle path ----------
+
+/** Ticks a path step ("Done ✓"), or un-ticks it. */
+export async function togglePathStep(stepId: string) {
+  const done = { ...(await getSetting('hustlePathDone')) };
+  if (done[stepId]) delete done[stepId];
+  else done[stepId] = new Date().toISOString();
+  await setSetting('hustlePathDone', done);
+}

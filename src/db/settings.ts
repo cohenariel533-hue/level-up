@@ -34,6 +34,9 @@ export interface AppSettings {
 
   /** About me (2.0 stage B). */
   profile: Profile;
+
+  /** Hustle path steps you've ticked: step id → when (2.0 stage C). */
+  hustlePathDone: Record<string, string>;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -49,6 +52,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   studyPlannerKey: '',
   studyGoalHours: 15,
   profile: DEFAULT_PROFILE,
+  hustlePathDone: {},
 };
 
 export async function getSetting<K extends keyof AppSettings>(key: K): Promise<AppSettings[K]> {

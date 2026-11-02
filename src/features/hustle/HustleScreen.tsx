@@ -8,10 +8,11 @@ import { weekStart } from '../../lib/dates';
 import { goalProgress, hustleStats } from '../../lib/hustle';
 import { OrderSheet } from './OrderSheet';
 import { OrdersBoard } from './OrdersBoard';
+import { PathCard } from './PathCard';
 import { GoalCard, StatsCard } from './StatsCards';
 import { TimerCard } from './TimerCard';
 
-/** Side hustle: orders board, hours timer, stats and the 90-day goal. */
+/** Side hustle: your path, orders board, hours timer, stats and the 90-day goal. */
 export default function HustleScreen() {
   const now = useNow(60_000); // stats with a running timer refresh each minute
   const [sheet, setSheet] = useState<{ order?: Order } | null>(null);
@@ -35,6 +36,7 @@ export default function HustleScreen() {
       <PageHeader eyebrow={t.hustle.subtitle} title={t.hustle.title} />
 
       <div className="stack">
+        <PathCard orders={orders} />
         {orders.length === 0 && <p className="muted small" style={{ marginInline: 4 }}>{t.hustle.emptyBoard}</p>}
         <OrdersBoard orders={orders} onSelect={(order) => setSheet({ order })} />
         <TimerCard weekSessions={weekSessions} orders={orders} />

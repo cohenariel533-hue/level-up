@@ -544,8 +544,6 @@ export const en = {
       startPaidOrder: (client: string) => `Start building ${client}’s site`,
       askReview: (client: string) => `Ask ${client} for a review`,
       askReviewDetail: 'A screenshot of a happy message is your best ad.',
-      firstStep: 'Start the hustle: plan your demo anniversary site',
-      firstStepDetail: 'Pick a fake couple, 3 sections, one surprise. Full step-by-step path comes next.',
       hustleHours: (left: string) => `30 min on the hustle (${left} to this week’s goal)`,
       addAllowance: 'Add this month’s allowance',
       addAllowanceDetail: 'So your budget buckets can split it.',
@@ -565,6 +563,157 @@ export const en = {
       bedtimeDetail: 'Phone away, lights low. Tomorrow-you says thanks.',
       aboutMe: 'Tell Level Up about you (2 min)',
       aboutMeDetail: 'So your moves fit your real day.',
+    },
+  },
+
+  path: {
+    title: 'Your path',
+    level: (n: number, total: number, name: string) => `Level ${n} of ${total} · ${name}`,
+    levels: {
+      showcase: 'Build your showcase',
+      seen: 'Get seen',
+      first: 'First customers',
+      system: 'Make it a system',
+      local: 'Local businesses',
+    },
+    next: 'Next step',
+    upNext: 'After that',
+    markDone: 'Done ✓',
+    stepDone: 'Step done. Next one is ready.',
+    autoHint: 'Ticks itself from your orders board.',
+    tips: 'How to',
+    showAll: 'See the whole path',
+    hideAll: 'Hide the path',
+    undo: 'Mark as not done',
+    complete: 'You’ve finished the whole path. Time to set bigger goals.',
+    startedAt: 'Started from where you said you are (About me).',
+
+    steps: {
+      niche: {
+        title: 'Pick your first focus: anniversary sites',
+        why: 'One clear offer is easier to sell than “I build websites”.',
+        tips: ['Anniversaries are emotional, so people happily pay.', 'Birthdays and proposals come right after.'],
+      },
+      brand: {
+        title: 'Choose a brand name and an Instagram handle',
+        why: 'A name makes it feel real, to you and to customers.',
+        tips: ['Short, easy to say in Hebrew and English.', 'Check the handle is free on Instagram first.'],
+      },
+      demoPlan: {
+        title: 'Plan your demo anniversary site',
+        why: 'A demo sells better than any description.',
+        tips: ['Invent a couple: names, how they met, 3 photos.', '3 sections: our story, a photo timeline, a surprise at the end.'],
+      },
+      demoBuild: {
+        title: 'Build the demo site with Claude Code',
+        why: 'This becomes your portfolio and your first template.',
+        tips: ['Aim for wow on a phone: most people open it there.', 'One surprise moment (a hidden note, music, a countdown).'],
+      },
+      demoPublish: {
+        title: 'Put the demo online and test it on your phone',
+        why: 'You need one link you can send to anyone.',
+        tips: ['Free hosting: GitHub Pages or Netlify, same as Level Up.', 'Open it on 2 phones and fix anything weird.'],
+      },
+      demoVideo: {
+        title: 'Record a 30-second screen video of the demo',
+        why: 'Videos get shared; links get ignored.',
+        tips: ['Screen-record on the iPhone while scrolling slowly.', 'Add soft music and one line of text at the start.'],
+      },
+      offer: {
+        title: 'Write your one-message offer',
+        why: 'So reaching out takes 10 seconds, not 10 minutes.',
+        tips: ['What they get, the price (₪149 / ₪299), how fast.', 'End with a question: “Have an anniversary coming up?”'],
+      },
+      instagram: {
+        title: 'Set up the Instagram page',
+        why: 'People check it before they pay a stranger.',
+        tips: ['Bio: what you make + price from ₪149.', 'First 3 posts: the demo video and 2 screenshots.'],
+      },
+      warmList: {
+        title: 'List 20 people who might know someone',
+        why: 'Your first customers almost always come from people who know you.',
+        tips: ['Friends, family, classmates, your parents’ friends.', 'Couples with anniversaries, friends with birthdays coming.'],
+      },
+      outreach: {
+        title: 'Send your offer to 10 people from the list',
+        why: 'This is the step that actually makes money.',
+        tips: ['Personal message, not a group blast.', 'Ask them to share it if it’s not for them.'],
+      },
+      status: {
+        title: 'Post the demo on your WhatsApp status and story',
+        why: 'Free reach to everyone who already knows you.',
+        tips: ['Post the video, then a screenshot the next day.'],
+      },
+      firstLead: {
+        title: 'Get your first lead',
+        why: 'Add anyone interested to the board as a Lead.',
+        tips: ['Message 3 more people from your list today.', 'Follow up with anyone who said “maybe”.'],
+      },
+      launchDeal: {
+        title: 'Offer your first 3 customers ₪100 off for a review',
+        why: 'Early reviews are worth more than the discount.',
+        tips: ['Say it’s a launch price, for the first 3 only.'],
+      },
+      firstSale: {
+        title: 'Close your first sale',
+        why: 'Moving an order to Paid ticks this.',
+        tips: ['Ask for payment up front (Bit or PayBox).', 'Agree on the deadline and what they’ll send you.'],
+      },
+      wowDelivery: {
+        title: 'Deliver your first site with a little extra',
+        why: 'A wow moment turns customers into referrals.',
+        tips: ['Add one thing they didn’t ask for: a song, a hidden message.', 'Send it with instructions for how to surprise their partner.'],
+      },
+      firstReview: {
+        title: 'Get your first review',
+        why: 'Moving an order to Got review ticks this.',
+        tips: ['Ask right after they see it, when they’re excited.', 'A screenshot of their reaction is perfect.'],
+      },
+      template: {
+        title: 'Turn your best site into a reusable template',
+        why: 'Then each new order takes 2 hours, not 6.',
+        tips: ['Keep the structure, swap names, photos and colors.', 'Note your steps so you can repeat them fast.'],
+      },
+      intakeForm: {
+        title: 'Make a simple order form',
+        why: 'Collect names, photos and the story in one go.',
+        tips: ['A Google Form is enough.', 'Ask for: names, date, 5–10 photos, 3 memories, the surprise.'],
+      },
+      testimonial: {
+        title: 'Post your first review (with permission)',
+        why: 'Proof from a real customer sells the next ones.',
+        tips: ['Blur names if they prefer.'],
+      },
+      referral: {
+        title: 'Start referrals: ₪30 off for every friend who orders',
+        why: 'Happy customers know other couples.',
+        tips: ['Mention it in your delivery message.'],
+      },
+      fiveCustomers: {
+        title: 'Reach 5 customers',
+        why: 'Ticks itself from your board. Halfway to your 90-day goal!',
+        tips: ['Keep 3 outreach messages a week going.', 'Ask every happy customer to share.'],
+      },
+      bizDemo: {
+        title: 'Build a demo site for a local café or barber',
+        why: 'Businesses pay more and come back for updates.',
+        tips: ['One page: hours, menu or prices, map, WhatsApp button.'],
+      },
+      bizList: {
+        title: 'List 15 local businesses without a good website',
+        why: 'Your next customers are walking distance away.',
+        tips: ['Google Maps: places with no website or an old one.'],
+      },
+      bizReach: {
+        title: 'Walk in or DM 5 of them with your demo',
+        why: 'Showing beats telling, every time.',
+        tips: ['Show it on your phone in 30 seconds.', 'Leave a card or the link.'],
+      },
+      bizPrice: {
+        title: 'Set your business package price',
+        why: 'Know your number before they ask.',
+        tips: ['Count your hours, then multiply by the ₪/hour you want.'],
+      },
     },
   },
 
