@@ -8,6 +8,7 @@ import { monthKey, toISODate, weekStart } from '../../lib/dates';
 import { gymSessionsByDate } from '../../lib/gym';
 import { minutesByDate } from '../../lib/hustle';
 import { pathFacts, pathStatus } from '../../lib/hustlePath';
+import { buildProgram, headlineTarget, planSession, sessionSummary } from '../../lib/program';
 import { waitStatus } from '../../lib/money';
 import { previousWeek } from '../../lib/review';
 import { studyMinutesToday } from '../../lib/studyFeed';
@@ -24,11 +25,12 @@ export async function loadCoachContext(now: Date = new Date()): Promise<CoachCon
   const endISO = toISODate(addDays(start, 6));
   const month = monthKey(now);
 
-  const [profile, pathDone, examMode, dayLog, weekDays, workouts, sessions, template, classes, orders, money, moneyCheck, review, lastReview, study, expensesWeek] =
+  const [profile, pathDone, examMode, allWorkouts, dayLog, weekDays, workouts, sessions, template, classes, orders, money, moneyCheck, review, lastReview, study, expensesWeek] =
     await Promise.all([
       getSetting('profile'),
       getSetting('hustlePathDone'),
       getSetting('examMode'),
+      db.workouts.toArray(),
       db.days.get(date),
       db.days.where('date').between(startISO, endISO, true, true).toArray(),
       db.workouts.where('date').between(startISO, endISO, true, true).toArray(),
@@ -44,10 +46,12 @@ export async function loadCoachContext(now: Date = new Date()): Promise<CoachCon
       db.expenses.where('date').between(startISO, endISO, true, true).toArray(),
     ]);
 
-  const targets = weeklyTargets(examMode);
+  const targets = weeklyTargets(examMode, profile.gymDays);
   const progress = weekProgress(weekDays, minutesByDate(sessions, now), gymSessionsByDate(workouts, weekDays));
   const gymBlock = blocksForDay(now.getDay(), template, classes).find((b) => b.pillar === 'gym');
   const step = pathStatus(pathDone, pathFacts(orders), profile.hustleStage).current;
+  const plan = planSession(buildProgram(profile.gymDays, profile.gymSetup), profile.gymLevel, allWorkouts, date, examMode);
+  const beat = headlineTarget(plan);
   const stepText = step ? t.path.steps[step.id as keyof typeof t.path.steps] : null;
 
   return {
@@ -64,6 +68,11 @@ export async function loadCoachContext(now: Date = new Date()): Promise<CoachCon
       workoutToday: workouts.some((w) => w.date === date) || !!dayLog?.done.some((d) => d.pillar === 'gym'),
       // the block's time, or "anytime" for an untimed gym block; null when there's none today
       blockToday: gymBlock ? (gymBlock.start ?? t.today.anytime) : null,
+      session: {
+        name: t.gym.program.days[plan.day.id as keyof typeof t.gym.program.days],
+        lifts: sessionSummary(plan),
+        beat: beat ? `${beat.name} ${beat.weight}kg×${beat.reps}` : null,
+      },
     },
     hustle: {
       minutesThisWeek: progress.hustleMinutes,

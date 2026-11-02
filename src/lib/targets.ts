@@ -9,13 +9,13 @@ export interface WeeklyTargets {
 }
 
 /**
- * Normal weeks: gym 4, hustle 7 h.
+ * Normal weeks: gym = your sessions a week (About me, 4 by default), with a
+ * minimum one less; hustle 7 h.
  * Exam mode: hustle drops to 2 h, gym stays.
  */
-export function weeklyTargets(examMode: boolean): WeeklyTargets {
-  return examMode
-    ? { gym: 4, gymMinimum: 3, hustleHours: 2 }
-    : { gym: 4, gymMinimum: 3, hustleHours: 7 };
+export function weeklyTargets(examMode: boolean, gymDays = 4): WeeklyTargets {
+  const gym = { gym: gymDays, gymMinimum: Math.max(gymDays - 1, 1) };
+  return { ...gym, hustleHours: examMode ? 2 : 7 };
 }
 
 export interface WeekProgress {

@@ -20,7 +20,7 @@ export function lastPerformance(workouts: Workout[], name: string, beforeDate: s
   const key = exerciseKey(name);
   if (!key) return null;
   for (const w of [...workouts].sort(newestFirst)) {
-    if (w.id === excludeId || w.date > beforeDate) continue;
+    if ((excludeId !== undefined && w.id === excludeId) || w.date > beforeDate) continue;
     const entry = w.exercises.find((e) => exerciseKey(e.name) === key);
     if (entry) return { entry, date: w.date };
   }
@@ -32,7 +32,7 @@ export function bestWeight(workouts: Workout[], name: string, excludeId?: number
   const key = exerciseKey(name);
   let best = 0;
   for (const w of workouts) {
-    if (w.id === excludeId) continue;
+    if (excludeId !== undefined && w.id === excludeId) continue;
     for (const e of w.exercises) if (exerciseKey(e.name) === key) best = Math.max(best, e.weight);
   }
   return best;

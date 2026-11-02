@@ -6,6 +6,7 @@ import type { ExerciseEntry, Workout, WorkoutType } from '../../db/schema';
 import { t } from '../../i18n/en';
 import { formatDayShort, todayISO } from '../../lib/dates';
 import { bestWeight, exerciseKey, formatEntry, lastPerformance, SUGGESTED_EXERCISES, volume } from '../../lib/gym';
+import type { SessionPlan, Target } from '../../lib/program';
 import ms from '../money/money.module.css';
 import s from './gym.module.css';
 
@@ -30,6 +31,15 @@ const toRow = (e: ExerciseEntry): Row => ({
   weight: e.weight ? String(e.weight) : '',
   minutes: e.minutes ? String(e.minutes) : '',
 });
+/** A row pre-filled with a program target (blank weight = "choose your weight"). */
+const targetRow = (target: Target): Row => ({
+  key: nextKey++,
+  name: target.name,
+  sets: String(target.sets),
+  reps: String(target.reps),
+  weight: target.weight ? String(target.weight) : '',
+  minutes: '',
+});
 const num = (text: string) => {
   const n = Number(text.replace(',', '.'));
   return Number.isFinite(n) && n > 0 ? n : 0;
@@ -46,12 +56,14 @@ interface Props {
   onClose: () => void;
   /** The workout to edit; leave out to log a new one. */
   workout?: Workout;
+  /** A program session to start from: fills in the exercises and today's targets. */
+  plan?: SessionPlan;
   /** All workouts, for "last time" numbers and personal bests. */
   history: Workout[];
 }
 
 /** Log a workout. Each exercise shows what you did last time, so you know what to beat. */
-export function WorkoutSheet({ open, onClose, workout, history }: Props) {
+export function WorkoutSheet({ open, onClose, workout, plan, history }: Props) {
   const toast = useToast();
   const [date, setDate] = useState(todayISO());
   const [type, setType] = useState<WorkoutType>('upper');
@@ -62,11 +74,17 @@ export function WorkoutSheet({ open, onClose, workout, history }: Props) {
   useEffect(() => {
     if (!open) return;
     setDate(workout?.date ?? todayISO());
-    setType(workout?.type ?? 'upper');
-    setRows(workout?.exercises.length ? workout.exercises.map(toRow) : [emptyRow()]);
+    setType(workout?.type ?? plan?.day.type ?? 'upper');
+    setRows(
+      workout?.exercises.length
+        ? workout.exercises.map(toRow)
+        : plan
+          ? plan.targets.map(targetRow)
+          : [emptyRow()],
+    );
     setNotes(workout?.notes ?? '');
     setConfirmDelete(false);
-  }, [open, workout]);
+  }, [open, workout, plan]);
 
   const cardio = type === 'cardio';
   const lastOfType = useMemo(
@@ -97,7 +115,13 @@ export function WorkoutSheet({ open, onClose, workout, history }: Props) {
 
   async function save() {
     if (!hasExercise) return;
-    const input = { date, type, exercises: rows.map((r) => toEntry(r, cardio)), notes };
+    const input = {
+      date,
+      type,
+      exercises: rows.map((r) => toEntry(r, cardio)),
+      notes,
+      programDay: workout?.programDay ?? plan?.day.id,
+    };
     if (workout?.id) await updateWorkout(workout.id, input);
     else await addWorkout(input);
     toast(t.gym.saved);
@@ -129,7 +153,7 @@ export function WorkoutSheet({ open, onClose, workout, history }: Props) {
           options={TYPES.map((value) => ({ value, label: t.gym.types[value] }))}
         />
 
-        {!workout && lastOfType && (
+        {!workout && !plan && lastOfType && (
           <Button variant="secondary" block icon={<Repeat />} onClick={repeatLast}>
             {t.gym.repeatLast(t.gym.types[type])}
           </Button>

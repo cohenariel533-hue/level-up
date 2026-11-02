@@ -37,6 +37,8 @@ describe('targets', () => {
   it('lowers the hustle goal in exam mode, keeping gym', () => {
     expect(weeklyTargets(false)).toEqual({ gym: 4, gymMinimum: 3, hustleHours: 7 });
     expect(weeklyTargets(true)).toEqual({ gym: 4, gymMinimum: 3, hustleHours: 2 });
+    // your own sessions a week (About me)
+    expect(weeklyTargets(false, 3)).toMatchObject({ gym: 3, gymMinimum: 2 });
   });
 
   it('adds up ticked blocks across the week', () => {

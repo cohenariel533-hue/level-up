@@ -10,8 +10,7 @@ import { weeklyTargets } from './targets';
 /** Order the pillars appear in the review and on Today. */
 export const REVIEW_PILLARS: ReviewPillar[] = ['school', 'gym', 'hustle', 'money'];
 
-/** The "bare minimum" week. */
-export const MINIMUM_GYM_SESSIONS = 3;
+/** The "bare minimum" hustle week (the gym minimum comes from your gym days). */
 export const MINIMUM_HUSTLE_HOURS = 5;
 
 /** Exam mode lowers the hustle goal to 2 h, so the minimum can't be higher than the goal. */
@@ -22,6 +21,8 @@ export interface WeekFacts {
   schoolPlanned: number;
   schoolDone: number;
   gymSessions: number;
+  /** One less than your sessions a week (About me). */
+  gymMinimum: number;
   hustleHours: number;
   moneyCheckDone: boolean;
   examMode: boolean;
@@ -34,7 +35,7 @@ export interface WeekFacts {
 export function autoMinimums(f: WeekFacts): Record<ReviewPillar, boolean> {
   return {
     school: f.schoolPlanned > 0 ? f.schoolDone >= f.schoolPlanned : true,
-    gym: f.gymSessions >= MINIMUM_GYM_SESSIONS,
+    gym: f.gymSessions >= f.gymMinimum,
     hustle: f.hustleHours >= hustleMinimum(f.examMode),
     money: f.moneyCheckDone,
   };

@@ -56,7 +56,15 @@ export interface CoachContext {
   profile: Profile;
   focusSet: boolean;
   examMode: boolean;
-  gym: { done: number; goal: number; minimum: number; workoutToday: boolean; blockToday: string | null };
+  gym: {
+    done: number;
+    goal: number;
+    minimum: number;
+    workoutToday: boolean;
+    blockToday: string | null;
+    /** The next program session (lib/program.ts): its name, first lifts and the lift to beat. */
+    session: { name: string; lifts: string; beat: string | null } | null;
+  };
   hustle: {
     minutesThisWeek: number;
     goalHours: number;
@@ -171,8 +179,18 @@ function schoolMoves(ctx: CoachContext): Move[] {
 function gymMoves(ctx: CoachContext): Move[] {
   const { done, goal, minimum, workoutToday, blockToday } = ctx.gym;
   if (workoutToday || done >= goal) return [];
+  const session = ctx.gym.session;
   if (blockToday) {
-    return [{ id: 'gym-today', pillar: 'gym', title: t.coach.m.gymToday, detail: t.coach.m.gymTodayDetail(blockToday), minutes: 75, to: '/gym', auto: true, priority: 75 }];
+    return [{
+      id: 'gym-today',
+      pillar: 'gym',
+      title: session ? t.coach.m.gymSession(session.name, session.lifts) : t.coach.m.gymToday,
+      detail: session ? t.coach.m.gymSessionDetail(blockToday, session.beat) : t.coach.m.gymTodayDetail(blockToday),
+      minutes: 75,
+      to: '/gym',
+      auto: true,
+      priority: 75,
+    }];
   }
   // No gym block today: suggest one only when the week needs it.
   const daysLeft = 7 - ctx.now.getDay(); // including today

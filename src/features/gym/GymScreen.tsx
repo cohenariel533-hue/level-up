@@ -3,27 +3,37 @@ import { Dumbbell, Flame, Trophy } from 'lucide-react';
 import { useCallback, useState, type CSSProperties } from 'react';
 import { Fab, GlassCard, ListRow, PageHeader, ProgressBar } from '../../components/ui';
 import { db, type Workout } from '../../db/schema';
+import { getSetting } from '../../db/settings';
 import { t } from '../../i18n/en';
-import { formatDayShort, formatShortDate, toISODate, weekStart } from '../../lib/dates';
+import { formatDayShort, formatShortDate, todayISO, toISODate, weekStart } from '../../lib/dates';
 import { formatEntry, gymSessionsByDate, personalBests, sessionsByWeek, weeklyStreak } from '../../lib/gym';
+import { buildProgram, planSession, type SessionPlan } from '../../lib/program';
 import { weeklyTargets } from '../../lib/targets';
 import s from './gym.module.css';
+import { ProgramCard } from './ProgramCard';
 import { WorkoutSheet } from './WorkoutSheet';
 
-/** Gym: this week vs the goal, the streak, recent workouts and personal bests. */
+/** Gym: your program, this week vs the goal, the streak, recent workouts and personal bests. */
 export default function GymScreen() {
-  const [sheet, setSheet] = useState<{ workout?: Workout } | null>(null);
+  const [sheet, setSheet] = useState<{ workout?: Workout; plan?: SessionPlan } | null>(null);
   const close = useCallback(() => setSheet(null), []);
 
   const data = useLiveQuery(async () => {
-    const [workouts, days] = await Promise.all([db.workouts.toArray(), db.days.toArray()]);
-    return { workouts, days };
+    const [workouts, days, profile, examMode] = await Promise.all([
+      db.workouts.toArray(),
+      db.days.toArray(),
+      getSetting('profile'),
+      getSetting('examMode'),
+    ]);
+    return { workouts, days, profile, examMode };
   });
 
   if (!data) return null;
-  const { workouts, days } = data;
+  const { workouts, days, profile, examMode } = data;
+  const program = buildProgram(profile.gymDays, profile.gymSetup);
+  const plan = planSession(program, profile.gymLevel, workouts, todayISO(), examMode);
 
-  const targets = weeklyTargets(false); // the gym goal is the same in exam mode
+  const targets = weeklyTargets(false, profile.gymDays); // the gym goal is the same in exam mode
   const thisWeek = toISODate(weekStart());
   const byWeek = sessionsByWeek(gymSessionsByDate(workouts, days));
   const count = byWeek[thisWeek] ?? 0;
@@ -36,6 +46,8 @@ export default function GymScreen() {
       <PageHeader title={t.gym.title} />
 
       <div className="stack">
+        <ProgramCard program={program} plan={plan} profile={profile} onStart={() => setSheet({ plan })} />
+
         <GlassCard title={t.gym.weekTitle}>
           <p className={s.weekNumber}>{t.gym.weekCount(count, targets.gym)}</p>
           <ProgressBar value={count} max={targets.gym} color="var(--c-gym)" />
@@ -103,7 +115,7 @@ export default function GymScreen() {
       </div>
 
       <Fab label={t.gym.logWorkout} onClick={() => setSheet({})} />
-      <WorkoutSheet open={sheet !== null} onClose={close} workout={sheet?.workout} history={workouts} />
+      <WorkoutSheet open={sheet !== null} onClose={close} workout={sheet?.workout} plan={sheet?.plan} history={workouts} />
     </>
   );
 }

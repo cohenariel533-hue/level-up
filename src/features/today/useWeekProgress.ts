@@ -26,16 +26,17 @@ export function useWeekProgress(): WeekRings | undefined {
   const minute = Math.floor(now.getTime() / 60_000);
 
   return useLiveQuery(async () => {
-    const [days, examMode, moneyCheck, sessions, workouts] = await Promise.all([
+    const [days, examMode, moneyCheck, sessions, workouts, profile] = await Promise.all([
       db.days.where('date').between(startISO, endISO, true, true).toArray(),
       getSetting('examMode'),
       db.moneyChecks.get(startISO),
       db.hustleSessions.where('start').aboveOrEqual(start.toISOString()).toArray(),
       db.workouts.where('date').between(startISO, endISO, true, true).toArray(),
+      getSetting('profile'),
     ]);
     return {
       progress: weekProgress(days, minutesByDate(sessions), gymSessionsByDate(workouts, days)),
-      targets: weeklyTargets(examMode),
+      targets: weeklyTargets(examMode, profile.gymDays),
       examMode,
       moneyCheckDone: !!moneyCheck,
       timerRunningSince: sessions.find((s) => s.end === null)?.start ?? null,

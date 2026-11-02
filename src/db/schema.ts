@@ -183,6 +183,8 @@ export interface Workout {
   exercises: ExerciseEntry[];
   notes: string;
   createdAt: string;
+  /** The program day it was logged from (e.g. "upperA"), so the rotation knows what's next (2.0 stage D). */
+  programDay?: string;
 }
 
 // ---------- Weekly review (stage 7) ----------

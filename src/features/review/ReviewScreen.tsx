@@ -12,7 +12,6 @@ import {
   countHit,
   defaultReviewWeek,
   hustleMinimum,
-  MINIMUM_GYM_SESSIONS,
   previousWeek,
   REVIEW_PILLARS,
   type WeekFacts,
@@ -214,7 +213,7 @@ function MinimumsList({
 }) {
   const labels: Record<ReviewPillar, string> = {
     school: t.review.minimumSchool(facts.schoolDone, facts.schoolPlanned),
-    gym: t.review.minimumGym(facts.gymSessions, MINIMUM_GYM_SESSIONS),
+    gym: t.review.minimumGym(facts.gymSessions, facts.gymMinimum),
     hustle: t.review.minimumHustle(facts.hustleHours, hustleMinimum(facts.examMode)),
     money: t.review.minimumMoney(facts.moneyCheckDone),
   };

@@ -411,6 +411,39 @@ export const en = {
     noWorkouts: 'No workouts yet. Tap + after your next session.',
     exercisesCount: (n: number) => (n === 1 ? '1 exercise' : `${n} exercises`),
     bestsTitle: 'Personal bests',
+
+    program: {
+      title: 'Your program',
+      splits: {
+        full2: '2 days · Full body A / B',
+        full3: '3 days · Full body A / B / C',
+        upperLower4: '4 days · Upper / Lower',
+        upperLower5: '5 days · Upper / Lower + Full',
+      },
+      days: {
+        upperA: 'Upper A',
+        upperB: 'Upper B',
+        lowerA: 'Lower A',
+        lowerB: 'Lower B',
+        fullA: 'Full body A',
+        fullB: 'Full body B',
+        fullC: 'Full body C',
+      },
+      next: 'Next session',
+      start: 'Start this workout',
+      examWeek: 'Exam week: one set fewer per exercise. Keep the habit, lighter load.',
+      comingBack: 'Welcome back! About 90% of your last weights to ease in.',
+      reasons: {
+        new: 'First time: leave ~2 reps in the tank',
+        up: (step: number) => `Hit the top last time → +${step} kg`,
+        reps: 'Same weight, one more rep',
+        back: 'Easing back in',
+        bodyweight: 'One more rep than last time',
+      },
+      chooseWeight: 'your weight',
+      setup: (setup: string, level: string) => `Built for: ${setup} · ${level}. Change it in About me.`,
+      howItWorks: 'Hit the top of the rep range and the weight goes up next time. Small steps, every week.',
+    },
   },
 
   review: {
@@ -534,6 +567,9 @@ export const en = {
       connectStudyDetail: 'So your exams and study hours show up here. Settings → Study Planner.',
       gymToday: 'Get your workout in',
       gymTodayDetail: (time: string) => `It’s on your week at ${time}. Log it after for the ring.`,
+      gymSession: (day: string, lifts: string) => `${day}: ${lifts}`,
+      gymSessionDetail: (time: string, beat: string | null) =>
+        [`On your week at ${time}`, beat ? `beat ${beat}` : null].filter(Boolean).join(' · '),
       gymCatchUp: (done: number, goal: number) => `Fit in a workout (${done}/${goal} this week)`,
       gymCatchUpEasy: 'Do a 20-min bodyweight session',
       gymCatchUpDetail: 'Even a short one counts toward the minimum.',

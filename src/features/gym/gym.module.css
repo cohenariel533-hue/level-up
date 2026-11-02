@@ -84,3 +84,33 @@
   font-size: 12px;
   font-weight: 700;
 }
+
+/* Your program */
+.sessionTitle {
+  margin: 2px 0 8px;
+  font-size: 24px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+.targetRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 2px;
+}
+.targetRow + .targetRow {
+  border-top: 1px solid var(--hairline);
+}
+.targetValue {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.targetValue svg {
+  width: 15px;
+  height: 15px;
+  color: var(--c-gym);
+}

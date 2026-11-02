@@ -25,7 +25,7 @@ function context(over: Partial<CoachContext> = {}): CoachContext {
     profile: { ...DEFAULT_PROFILE, completedAt: '2026-11-01T10:00:00Z' },
     focusSet: true,
     examMode: false,
-    gym: { done: 1, goal: 4, minimum: 3, workoutToday: false, blockToday: null },
+    gym: { done: 1, goal: 4, minimum: 3, workoutToday: false, blockToday: null, session: null },
     hustle: { minutesThisWeek: 180, goalHours: 7, orders: [{ id: 1, client: 'Noa', status: 'building', deadline: null, createdAt: '2026-10-30T10:00:00Z' }], pathStep: null },
     money: { month: '2026-11', allowanceSet: true, moneyCheckDone: false, funLeft: 300, funPlan: 500, waitReady: [], expensesToday: 1, watched: [] },
     study: { exams: [], deadlines: [], studiedTodayMin: 0, plannedTodayMin: 0 },
@@ -60,6 +60,11 @@ describe('rules', () => {
 
   it('suggests the gym on a gym day, and a catch-up only when the week needs it', () => {
     expect(ids(proposeMoves(context({ gym: { ...context().gym, blockToday: '17:00' } })))).toContain('gym-today');
+    // With a program, the move names the session and the lift to beat
+    const session = { name: 'Upper A', lifts: 'Bench press, Barbell row, Overhead press…', beat: 'Bench press 65kg×6' };
+    const named = proposeMoves(context({ gym: { ...context().gym, blockToday: '17:00', session } })).find((m) => m.id === 'gym-today')!;
+    expect(named.title).toBe('Upper A: Bench press, Barbell row, Overhead press…');
+    expect(named.detail).toContain('beat Bench press 65kg×6');
     expect(ids(proposeMoves(context()))).not.toContain('gym-today');
     // Friday with 1 of 3 done: urgent catch-up
     const friday = context({ now: new Date(2026, 10, 6, 10, 0) });
